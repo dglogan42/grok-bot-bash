@@ -3,8 +3,7 @@
 # Chats with grok-4.7, keeps a memory file per bot, and runs local
 # commands only after you approve them.
 #
-# Rebuild the binary package from this source tree:
-#   dpkg-buildpackage -us -uc
+# Rebuild the binary package with: make deb
 set -euo pipefail
 
 DATA="${XDG_DATA_HOME:-$HOME/.local/share}/grok-bot"
@@ -403,6 +402,8 @@ tool_list() {
     jq -cn --arg path "$path" '{ok:false, error:"not a directory", path:$path}'
     return 0
   fi
+  # The model reads this listing as text. The names are not parsed.
+  # shellcheck disable=SC2012
   listing=$(ls -la "$path" 2>&1 | head -c 20000 || true)
   jq -cn --arg path "$path" --arg output "$listing" '{ok:true, path:$path, output:$output}'
 }

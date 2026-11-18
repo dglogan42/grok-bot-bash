@@ -5,6 +5,12 @@ debian/*.debhelper
 debian/.debhelper/
 debian/grok-bot-bash/
 debian/tmp/
+grok-bot-bash_*.deb
+grok-bot-bash_*.changes
+grok-bot-bash_*.buildinfo
+grok-bot-bash_*.dsc
+grok-bot-bash_*.tar.xz
+grok-bot-bash_*.tar.gz
 
 # Editor and OS
 *~

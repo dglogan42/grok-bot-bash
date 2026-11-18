@@ -81,20 +81,32 @@ Each file under `marketplace/agents/` is the public template: name, job blurb, s
 
 `agent use` creates a local bot from that JSON: the description becomes the job, memories are saved, routines are saved, and skills are included in every reply. Import into the Grok Bot desktop app still happens on x.ai.
 
+## Development
+
+`make lint`, `make test`, and `make deb` make no xAI API call.
+
+```bash
+make lint
+make test
+make deb
+sudo make install
+```
+
+`make lint` runs shellcheck on `grok-bot`. `make test` runs `./grok-bot self-test`.
+
 ## Package
 
-The Debian source is native. Build it from a directory named `grok-bot-bash-1.0.0`:
+The Debian source is native. The binary package is `grok-bot-bash` and installs `/usr/bin/grok-bot-bash`. It does not take the `grok-bot` name used by the desktop app.
+
+`make deb` reads the version from `debian/changelog`, copies this tree to `/tmp/grok-bot-bash-<version>`, and runs `dpkg-buildpackage -us -uc --ignore-builtin-builddeps`. This package does not compile, so the build does not need `build-essential`. The `.deb` is left in the current directory. `sudo make install` builds that package and installs it with `dpkg -i`.
+
+Hand build for the 1.0.0 changelog entry. `dpkg-buildpackage` writes the `.deb` next to the build directory:
 
 ```bash
 cp -a grok-bot-bash /tmp/grok-bot-bash-1.0.0
 cd /tmp/grok-bot-bash-1.0.0
-dpkg-buildpackage -us -uc
-```
-
-The binary package is `grok-bot-bash` and installs `/usr/bin/grok-bot-bash`. It does not take the `grok-bot` name used by the desktop app.
-
-```bash
-sudo dpkg -i grok-bot-bash_1.0.0_all.deb
+dpkg-buildpackage -us -uc --ignore-builtin-builddeps
+sudo dpkg -i ../grok-bot-bash_1.0.0_all.deb
 ```
 
 ## License
