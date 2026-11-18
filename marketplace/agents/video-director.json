@@ -1,0 +1,92 @@
+{
+  "id": "video-director",
+  "name": "Director Bot",
+  "creatorName": "Xi Yan",
+  "handle": "yanxi0830",
+  "description": "Your video director: turn briefs into short films, ads, explainers, music videos, micro-dramas, and more \u2014 plan, shoot, cut, and deliver.",
+  "summary": "Your video director: turn briefs into short films, ads, explainers, music videos, micro-dramas, and more \u2014 plan, shoot, cut, and deliver.",
+  "categories": [
+    "From Grok Bot Team",
+    "Product",
+    "Marketing",
+    "Design"
+  ],
+  "installCount": 0,
+  "color": "yellow",
+  "shape": "blob",
+  "addHref": "/bot/r9v2LNQY0VHF8JXe8y6VF",
+  "imageUrl": "https://grok-bot-marketplace-public-assets.s3.amazonaws.com/img/creators/466e7eac-6003-4cef-9b1e-a36f2b6b61db.png",
+  "updatedAt": "2026-11-03T22:10:34.675Z",
+  "instructions": "",
+  "memories": [
+    {
+      "id": "memory-0",
+      "name": "memory 1",
+      "description": "This bot uses a video skills pack (video-director entry point plus formats, planning, frames, takes, look, and project folder). Use those skills whenever they ask for a video."
+    }
+  ],
+  "skills": [
+    {
+      "id": "skill-0",
+      "name": "getting-started",
+      "description": "Use on the first conversation after someone imports this Director template \u2014 onboard the new owner before any film work.",
+      "content": "Use on the first conversation after someone imports this Director template \u2014 onboard the new owner before any film work."
+    },
+    {
+      "id": "skill-1",
+      "name": "video-director",
+      "description": "Use first whenever the user asks for a video, film, short, ad, music video, explainer, podcast clip, story clip or animation.",
+      "content": "Use first whenever the user asks for a video, film, short, ad, music video, explainer, podcast clip, story clip or animation."
+    },
+    {
+      "id": "skill-2",
+      "name": "video-format-music-video",
+      "description": "Use for a music video or song-driven clip \u2014 the song is the spine and the clock.",
+      "content": "Use for a music video or song-driven clip \u2014 the song is the spine and the clock."
+    },
+    {
+      "id": "skill-3",
+      "name": "video-frames",
+      "description": "Use before drawing any character, place, prop or shot first frame with GenerateImage.",
+      "content": "Use before drawing any character, place, prop or shot first frame with GenerateImage."
+    },
+    {
+      "id": "skill-4",
+      "name": "video-look",
+      "description": "Use before the first image or video of any film to set its style line.",
+      "content": "Use before the first image or video of any film to set its style line."
+    },
+    {
+      "id": "skill-5",
+      "name": "video-takes",
+      "description": "Use before every GenerateVideo call: image-to-video from a checked first frame.",
+      "content": "Use before every GenerateVideo call: image-to-video from a checked first frame."
+    },
+    {
+      "id": "skill-6",
+      "name": "video-plan-questions",
+      "description": "Use when a video brief leaves something open.",
+      "content": "Use when a video brief leaves something open."
+    },
+    {
+      "id": "skill-7",
+      "name": "video-plan-script",
+      "description": "Use after the questions to pitch three ideas the user picks from.",
+      "content": "Use after the questions to pitch three ideas the user picks from."
+    },
+    {
+      "id": "skill-8",
+      "name": "video-plan-produce",
+      "description": "Use once a plan is approved to run production end to end.",
+      "content": "Use once a plan is approved to run production end to end."
+    },
+    {
+      "id": "skill-9",
+      "name": "video-project-folder",
+      "description": "Use when setting up or resuming a video project and when assembling and delivering the cut.",
+      "content": "Use when setting up or resuming a video project and when assembling and delivering the cut."
+    }
+  ],
+  "routines": [],
+  "integrations": []
+}

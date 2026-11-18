@@ -63,6 +63,16 @@ A routine is a saved prompt. Run it from cron with the bot slug:
 
 Add `--yes` only when that job should run shell commands with nobody there to approve them.
 
+## Marketplace sync
+
+Public agents from the [Grok Bot marketplace](https://x.ai/bot/marketplace) are stored in `marketplace/`. Refresh them, then commit and push this repo to keep GitHub in sync:
+
+```bash
+python3 scripts/pull-marketplace.py
+```
+
+Each file under `marketplace/agents/` is the public template: name, job blurb, skills, routines, and memories. Import into the Grok Bot app still happens on x.ai.
+
 ## Package
 
 The Debian source is native. Build it from a directory named `grok-bot-bash-1.0.0`:

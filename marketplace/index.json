@@ -1,0 +1,1441 @@
+{
+  "source": "https://x.ai/bot/marketplace",
+  "pulledAt": "2026-11-18T06:05:44Z",
+  "count": 92,
+  "saved": 92,
+  "errors": 0,
+  "agents": [
+    {
+      "id": "dr-eggbot-v2",
+      "name": "dr eggbot",
+      "creatorName": "Lauren Tan",
+      "handle": "poteto",
+      "categories": [
+        "From Grok Bot Team"
+      ],
+      "description": "Designs high-quality Grok Bots. Asks a few preference questions, then creates them with CreateAgent. Coding bots get the poteto-mode bar (one job, unslopped, verified). Non-coding bots get the same tightness: one job, one voice, explicit anti-jobs, no leftover tools. Casual, a little mad-scientist, short lowercase. Bias to act once the job is clear. Does not default to shareable templates.",
+      "updatedAt": "2026-09-04T22:19:28.701Z",
+      "url": "https://x.ai/bot/marketplace/bots/dr-eggbot-v2",
+      "addHref": "/bot/_jOdbfkB16zxu7MRcmReE",
+      "file": "agents/dr-eggbot-v2.json",
+      "error": null
+    },
+    {
+      "id": "overheard",
+      "name": "Overheard",
+      "creatorName": "Lenny Rachitsky",
+      "handle": "lennysan",
+      "categories": [],
+      "description": "Watches Reddit, Hacker News, news sites, and X for third-party mentions of your name, brand, and URLs, then sends a short weekday digest when something clears the bar. Stays quiet on dead days and never posts on your behalf.",
+      "updatedAt": "2026-09-04T22:21:40.855Z",
+      "url": "https://x.ai/bot/marketplace/bots/overheard",
+      "addHref": "/bot/NIEguoGUjA648fUPle8F5",
+      "file": "agents/overheard.json",
+      "error": null
+    },
+    {
+      "id": "tradbot-2",
+      "name": "Tradbot",
+      "creatorName": "Claire Vo",
+      "handle": "clairevo",
+      "categories": [],
+      "description": "Watches your personal email and calendar so school forms, bills, and RSVPs don't slip. Drafts the reply, catches the pickup clash, and never sends without you.",
+      "updatedAt": "2026-09-04T22:21:14.735Z",
+      "url": "https://x.ai/bot/marketplace/bots/tradbot-2",
+      "addHref": "/bot/wOE4e95HNxhSbrzyLkSI-",
+      "file": "agents/tradbot-2.json",
+      "error": null
+    },
+    {
+      "id": "projects-manager",
+      "name": "Projects Manager",
+      "creatorName": "Eric Zakariasson",
+      "handle": "ericzakariasson",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "description": "Runs your team's projects from Notion: one row per project, a channel per project, and tasks your specialist bots claim. You decide, agents execute, and it never does the specialist work itself.",
+      "updatedAt": "2026-09-03T06:55:18.353Z",
+      "url": "https://x.ai/bot/marketplace/bots/projects-manager",
+      "addHref": "/bot/AZKaQOsjrAa51Nb4xvTur",
+      "file": "agents/projects-manager.json",
+      "error": null
+    },
+    {
+      "id": "pg",
+      "name": "Outbound Prospecting",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Finds prospects that match your ideal customer, then drafts a first message to each one. Every name is researched on the public web, and nothing sends without your yes.",
+      "updatedAt": "2026-09-03T07:01:11.949Z",
+      "url": "https://x.ai/bot/marketplace/bots/pg",
+      "addHref": "/bot/i03IaF768-ielyzegoGye",
+      "file": "agents/pg.json",
+      "error": null
+    },
+    {
+      "id": "seo-aeo-desk",
+      "name": "SEO & AEO Desk",
+      "creatorName": "Adam Tanguay",
+      "handle": "adamta",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Turns your keywords into content ideas and writer-ready briefs for search and AI answers. Works from a pasted keyword list or your Search Console.",
+      "updatedAt": "2026-09-03T09:05:03.873Z",
+      "url": "https://x.ai/bot/marketplace/bots/seo-aeo-desk",
+      "addHref": "/bot/0IhyZWxwbf2cFmsmroZQL",
+      "file": "agents/seo-aeo-desk.json",
+      "error": null
+    },
+    {
+      "id": "imogen",
+      "name": "Imogen",
+      "creatorName": "Kent C. Dodds",
+      "handle": "kentcdodds",
+      "categories": [
+        "Design"
+      ],
+      "description": "Imogen the Impala Image Interpreter writes brief, copyable alt text focused on the most important part of an image, so images are accessible to blind people.",
+      "updatedAt": "2026-09-03T16:16:39.536Z",
+      "url": "https://x.ai/bot/marketplace/bots/imogen",
+      "addHref": "/bot/Eeu5NZp62OzQjtlY4ons2",
+      "file": "agents/imogen.json",
+      "error": null
+    },
+    {
+      "id": "researchy",
+      "name": "Researchy",
+      "creatorName": "Farzad",
+      "handle": "farzyness",
+      "categories": [
+        "Engineering"
+      ],
+      "description": "A research and fact-check desk that runs every pass on the latest Grok model with live web search. For anyone who needs sourced, dated claims instead of a training-only answer.",
+      "updatedAt": "2026-09-05T00:02:09.796Z",
+      "url": "https://x.ai/bot/marketplace/bots/researchy",
+      "addHref": "/bot/i2hvaEONDg6_gEF5C9RlK",
+      "file": "agents/researchy.json",
+      "error": null
+    },
+    {
+      "id": "haggle-bot",
+      "name": "Haggle Bot",
+      "creatorName": "Daniel Gartshein",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team"
+      ],
+      "description": "Inventories your SaaS spend from Ramp and bills, finds evidence-backed savings (unused seats, duplicates, cheaper alternatives), and drafts vendor counters for your review. Never spends, signs, or sends without you.",
+      "updatedAt": "2026-09-04T22:20:34.452Z",
+      "url": "https://x.ai/bot/marketplace/bots/haggle-bot",
+      "addHref": "/bot/pwQ612YrX3R0eACnIMlom",
+      "file": "agents/haggle-bot.json",
+      "error": null
+    },
+    {
+      "id": "credit-card-max",
+      "name": "Credit Card Max",
+      "creatorName": "Trevin Chow",
+      "handle": "trevin",
+      "categories": [
+        "Personal"
+      ],
+      "description": "Credit card maxing with live Grok Finance (Plaid): which card to swipe given your priorities (points, cash back, airline/hotel status), statement-credit tracking with muteable expiry nags, wrong-card recurring flags, and a monthly points-and-perks rollup \u2014 not budgeting.",
+      "updatedAt": "2026-10-14T04:42:04.977Z",
+      "url": "https://x.ai/bot/marketplace/bots/credit-card-max",
+      "addHref": "/bot/q4u8YgzGQqCAOUZcg0Lgt",
+      "file": "agents/credit-card-max.json",
+      "error": null
+    },
+    {
+      "id": "mr-toms",
+      "name": "Recruiting Coordinator",
+      "creatorName": "Tommy Hansen",
+      "handle": "TommyHansenTA",
+      "categories": [
+        "From Grok Bot Team",
+        "Recruiting & People"
+      ],
+      "description": "Schedules interview loops, preps your interviewers, and chases what's stalled. Works from your calendar or a pasted list, and never emails a candidate without you.",
+      "updatedAt": "2026-09-03T07:22:59.899Z",
+      "url": "https://x.ai/bot/marketplace/bots/mr-toms",
+      "addHref": "/bot/KDahOjiDbbAvxqx9KaGcq",
+      "file": "agents/mr-toms.json",
+      "error": null
+    },
+    {
+      "id": "image-gen-bot",
+      "name": "Stills & Clips Desk",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Pulls stills, thumbnails, and short clips out of your footage, sized for where they go. Cleans up screenshots for docs too, and writes the caption and alt text.",
+      "updatedAt": "2026-09-03T16:16:33.332Z",
+      "url": "https://x.ai/bot/marketplace/bots/image-gen-bot",
+      "addHref": "/bot/V8XugyLxzbQXLM9o5b3B-",
+      "file": "agents/image-gen-bot.json",
+      "error": null
+    },
+    {
+      "id": "figma-bro",
+      "name": "figma bro",
+      "creatorName": "John Bai",
+      "handle": "johnbai",
+      "categories": [
+        "From Grok Bot Team",
+        "Design"
+      ],
+      "description": "Turns a Figma frame into a build spec, and audits your components, tokens, and motion. Builds screens from a brief too, and works from a pasted link when Figma isn't connected.",
+      "updatedAt": "2026-09-03T16:16:39.143Z",
+      "url": "https://x.ai/bot/marketplace/bots/figma-bro",
+      "addHref": "/bot/pXNvc_U2cGyZmheYrUuF_",
+      "file": "agents/figma-bro.json",
+      "error": null
+    },
+    {
+      "id": "follow-through-agent",
+      "name": "GTM Loop Closer",
+      "creatorName": "Jon Grigull",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Finds promises, follow-ups, and customer details left behind in meetings, email, Slack, CRM, or task tools. Shows the evidence and prepares the reply, task, or update needed to close each loop.",
+      "updatedAt": "2026-09-03T09:06:22.191Z",
+      "url": "https://x.ai/bot/marketplace/bots/follow-through-agent",
+      "addHref": "/bot/gj3IlHOOpzecm6xpmPJOt",
+      "file": "agents/follow-through-agent.json",
+      "error": null
+    },
+    {
+      "id": "sales-call-coach",
+      "name": "Sales Call Coach",
+      "creatorName": "Daniel Brill",
+      "handle": "danielbrill_",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Scores your sales calls and tells you what to fix before the next one. Works from a pasted transcript or an uploaded recording.",
+      "updatedAt": "2026-09-03T09:04:41.247Z",
+      "url": "https://x.ai/bot/marketplace/bots/sales-call-coach",
+      "addHref": "/bot/yZ5MFQFdl32vHt6fcIJAc",
+      "file": "agents/sales-call-coach.json",
+      "error": null
+    },
+    {
+      "id": "echo",
+      "name": "Meeting Recap Deck",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Turns your meeting notes into a recap deck in your slide template. Works from notes you paste or upload, and never invents a quote.",
+      "updatedAt": "2026-09-03T07:05:46.679Z",
+      "url": "https://x.ai/bot/marketplace/bots/echo",
+      "addHref": "/bot/YklttiPpAHweKbOLV1TSF",
+      "file": "agents/echo.json",
+      "error": null
+    },
+    {
+      "id": "pitch-deck-coach",
+      "name": "Pitch Deck Coach",
+      "creatorName": "Hiten Shah",
+      "handle": "hnshah",
+      "categories": [
+        "Sales"
+      ],
+      "description": "Reviews a pitch deck and reports what an investor is likely to understand, believe, question, and remember, then helps strengthen the story, evidence, and slides.",
+      "updatedAt": "2026-09-03T03:35:06.843Z",
+      "url": "https://x.ai/bot/marketplace/bots/pitch-deck-coach",
+      "addHref": "/bot/zkVS-PkX1ooTE2nP21DPO",
+      "file": "agents/pitch-deck-coach.json",
+      "error": null
+    },
+    {
+      "id": "clip-bot",
+      "name": "Clip Bot",
+      "creatorName": "This Week in AI",
+      "handle": "ThisWeeknAI",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Finds the best moments in a long recording and cuts them into short captioned clips. Works from an upload or a link, with transcript and timestamps on every clip.",
+      "updatedAt": "2026-09-03T06:33:12.986Z",
+      "url": "https://x.ai/bot/marketplace/bots/clip-bot",
+      "addHref": "/bot/-L1yFJ5mtwPgn3O_iYUo_",
+      "file": "agents/clip-bot.json",
+      "error": null
+    },
+    {
+      "id": "human-copywriter",
+      "name": "Copy Humanizer",
+      "creatorName": "Massimo De Luisa",
+      "handle": "massimodeluisa",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Edits and rewrites drafts, emails, and pages so they read like a person wrote them. Keeps your voice, shows every change and why, and never invents a fact.",
+      "updatedAt": "2026-09-03T06:17:21.396Z",
+      "url": "https://x.ai/bot/marketplace/bots/human-copywriter",
+      "addHref": "/bot/YwxIbVEWqXN-HYCxiMCoB",
+      "file": "agents/human-copywriter.json",
+      "error": null
+    },
+    {
+      "id": "ai-search-visibility",
+      "name": "AI Search Visibility",
+      "creatorName": "Adam Tanguay",
+      "handle": "adamta",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Checks whether AI assistants and Google recommend you, and who they name instead. Starts from a handful of questions your buyers actually ask.",
+      "updatedAt": "2026-09-03T16:16:31.430Z",
+      "url": "https://x.ai/bot/marketplace/bots/ai-search-visibility",
+      "addHref": "/bot/BFiw9Y7BzTQ-3jFBAro1X",
+      "file": "agents/ai-search-visibility.json",
+      "error": null
+    },
+    {
+      "id": "engineer-bot",
+      "name": "Lingxi's Engineer Bot",
+      "creatorName": "Lingxi Li",
+      "handle": "lingxi",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "description": "A hands-off engineering supervisor. Boards work, launches cloud agents on the repo you name, watches PRs on a 30-minute cadence, and only asks you to merge.",
+      "updatedAt": "2026-09-03T10:01:19.058Z",
+      "url": "https://x.ai/bot/marketplace/bots/engineer-bot",
+      "addHref": "/bot/SxqbG1NT5qEw7ggmHqQu_",
+      "file": "agents/engineer-bot.json",
+      "error": null
+    },
+    {
+      "id": "tinkabot",
+      "name": "tinkabot",
+      "creatorName": "Lauren Tan",
+      "handle": "poteto",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "description": "Wraps an API into a Cursor/Agent Plugin (MCP + skills). Data shape first, smallest scaffold that works, prove locally, then ask once for affiliation and publish to Marketplace or cursor.directory.",
+      "updatedAt": "2026-09-03T10:01:21.217Z",
+      "url": "https://x.ai/bot/marketplace/bots/tinkabot",
+      "addHref": "/bot/-hmCmHB0ynJGvSKxeINfS",
+      "file": "agents/tinkabot.json",
+      "error": null
+    },
+    {
+      "id": "critiquito",
+      "name": "Critiquito: Design Critique",
+      "creatorName": "Manuel Mu\u00f1oz Solera",
+      "handle": "mamuso",
+      "categories": [
+        "From Grok Bot Team",
+        "Design"
+      ],
+      "description": "Turns a screenshot or Figma link into a design critique with ranked, concrete fixes. Covers hierarchy, type, color, copy, and accessibility, and never edits your files.",
+      "updatedAt": "2026-09-03T07:11:17.786Z",
+      "url": "https://x.ai/bot/marketplace/bots/critiquito",
+      "addHref": "/bot/NqdH9qGvrq-yWRaXhJGM-",
+      "file": "agents/critiquito.json",
+      "error": null
+    },
+    {
+      "id": "sable-game-art",
+      "name": "Game Art Director",
+      "creatorName": "Danny Limanseta",
+      "handle": "DannyLimanseta",
+      "categories": [
+        "Design"
+      ],
+      "description": "Turns a game concept into a style guide, palettes, and prompt sheets for your image tool. Slices sprite sheets and checks your art for palette and grid drift.",
+      "updatedAt": "2026-09-03T07:11:16.703Z",
+      "url": "https://x.ai/bot/marketplace/bots/sable-game-art",
+      "addHref": "/bot/KQnsHIvv4_Xk7HyhmewP3",
+      "file": "agents/sable-game-art.json",
+      "error": null
+    },
+    {
+      "id": "home-robots",
+      "name": "Home robots",
+      "creatorName": "Sawyer Merritt",
+      "handle": "SawyerMerritt",
+      "categories": [
+        "Personal"
+      ],
+      "description": "Control home robots from chat: a Segway Navimow, a Matic vacuum, and other official vacuums, mowers, and Matter robots. Connect each once, then say start, pause, dock, or how's it doing.",
+      "updatedAt": "2026-09-05T00:01:57.829Z",
+      "url": "https://x.ai/bot/marketplace/bots/home-robots",
+      "addHref": "/bot/c47Jj2QSSR1UXEcuBgUtQ",
+      "file": "agents/home-robots.json",
+      "error": null
+    },
+    {
+      "id": "flora",
+      "name": "Flora: Plant Care Log",
+      "creatorName": "Rich Silver",
+      "handle": "RichSilver",
+      "categories": [
+        "Personal"
+      ],
+      "description": "Flora keeps a private houseplant care log and weekly reminders. She builds a plant journal on her computer that you can page through, and your plants do not copy if someone else installs her.",
+      "updatedAt": "2026-09-03T16:16:37.164Z",
+      "url": "https://x.ai/bot/marketplace/bots/flora",
+      "addHref": "/bot/dGYdqS9vLSXpxoNCPBHys",
+      "file": "agents/flora.json",
+      "error": null
+    },
+    {
+      "id": "sherlock",
+      "name": "Talent Discovery",
+      "creatorName": "Tommy Hansen",
+      "handle": "TommyHansenTA",
+      "categories": [
+        "From Grok Bot Team",
+        "Recruiting & People"
+      ],
+      "description": "Finds candidates for open roles that match your criteria and aren't already in your ATS.",
+      "updatedAt": "2026-09-03T16:16:36.637Z",
+      "url": "https://x.ai/bot/marketplace/bots/sherlock",
+      "addHref": "/bot/vIX2YW6rr6nQnf8-Rhyzc",
+      "file": "agents/sherlock.json",
+      "error": null
+    },
+    {
+      "id": "cooper",
+      "name": "Cooper",
+      "creatorName": "Tommy Hansen",
+      "handle": "TommyHansenTA",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "News agent for AI, tech, venture capital, and business. Delivers a tight daily Slack briefing of top stories at 8am, plus weekday mid-day competitor alerts only when something truly clears the bar.",
+      "updatedAt": "2026-09-03T16:16:38.660Z",
+      "url": "https://x.ai/bot/marketplace/bots/cooper",
+      "addHref": "/bot/8hhdYqfvRzigWstUtcmBZ",
+      "file": "agents/cooper.json",
+      "error": null
+    },
+    {
+      "id": "landing-page-copy-critic",
+      "name": "Landing Page Copy Critic",
+      "creatorName": "Austen Allred",
+      "handle": "Austen",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Reads your landing pages like a first-time buyer and drafts sharper headlines and CTAs. Never touches your site.",
+      "updatedAt": "2026-11-18T00:31:37.543Z",
+      "url": "https://x.ai/bot/marketplace/bots/landing-page-copy-critic",
+      "addHref": "/bot/310Ny4COHBcdPGpC0I2P4",
+      "file": "agents/landing-page-copy-critic.json",
+      "error": null
+    },
+    {
+      "id": "video-director",
+      "name": "Director Bot",
+      "creatorName": "Xi Yan",
+      "handle": "yanxi0830",
+      "categories": [
+        "From Grok Bot Team",
+        "Product",
+        "Marketing",
+        "Design"
+      ],
+      "description": "Your video director: turn briefs into short films, ads, explainers, music videos, micro-dramas, and more \u2014 plan, shoot, cut, and deliver.",
+      "updatedAt": "2026-11-03T22:10:34.675Z",
+      "url": "https://x.ai/bot/marketplace/bots/video-director",
+      "addHref": "/bot/r9v2LNQY0VHF8JXe8y6VF",
+      "file": "agents/video-director.json",
+      "error": null
+    },
+    {
+      "id": "video-editor",
+      "name": "Video Editor",
+      "creatorName": "Ethan Ng",
+      "handle": "Ethan_Ng_13",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Edits short vertical talking-head videos from your raw footage: picks the best takes, captions what you actually said, and adds B-roll, motion graphics, and music. Sends an edit plan for your yes before cutting, checks every cut for sync and glitches, and never posts.",
+      "updatedAt": "2026-10-07T07:55:06.511Z",
+      "url": "https://x.ai/bot/marketplace/bots/video-editor",
+      "addHref": "/bot/14O3EsptD43aAhoAzvfq3",
+      "file": "agents/video-editor.json",
+      "error": null
+    },
+    {
+      "id": "distro-bot",
+      "name": "Distro Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Runs your marketing loop end to end: campaigns on your ad accounts, fresh creative, real channel analysis, timely posts from X and web scans, and outbound until a lead replies. Learns from your past campaigns and never changes spend, posts, or sends without your yes.",
+      "updatedAt": "2026-10-01T14:51:08.231Z",
+      "url": "https://x.ai/bot/marketplace/bots/distro-bot",
+      "addHref": "/bot/XbN6iofs_Qjsi2Od1yjyI",
+      "file": "agents/distro-bot.json",
+      "error": null
+    },
+    {
+      "id": "proto-bot",
+      "name": "Proto Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Product"
+      ],
+      "description": "Turns your daily ideas into live, shareable prototypes in your real app, built as draft pull requests with click-path screenshots and a short video, plus Figma mocks, images, and memes on the side. Never merges, publishes, or shares without your yes.",
+      "updatedAt": "2026-10-01T06:31:02.350Z",
+      "url": "https://x.ai/bot/marketplace/bots/proto-bot",
+      "addHref": "/bot/p4sSEZV7xqcBgdT7m2O8i",
+      "file": "agents/proto-bot.json",
+      "error": null
+    },
+    {
+      "id": "sell-bot",
+      "name": "Sell Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Works your whole customer journey: outreach in your voice, booked calls with prep and follow-ups, proposals and contracts, then activation, support and billing answers, and expansion. Drafts everything for your review and sends only what you approve, one message at a time.",
+      "updatedAt": "2026-10-01T06:31:04.646Z",
+      "url": "https://x.ai/bot/marketplace/bots/sell-bot",
+      "addHref": "/bot/znrhzY4AYMg4v3QTfU0IJ",
+      "file": "agents/sell-bot.json",
+      "error": null
+    },
+    {
+      "id": "startup-qa-bot",
+      "name": "Startup QA Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Product"
+      ],
+      "description": "Walks your product every weekday in its own test account and tells you what shipped, what got unshipped, what broke (with repro steps and screenshots), and which calls need you. Reads its own verification emails or takes pasted codes, and never touches real data.",
+      "updatedAt": "2026-10-01T06:31:07.235Z",
+      "url": "https://x.ai/bot/marketplace/bots/startup-qa-bot",
+      "addHref": "/bot/XBauviUoNcdi05-ExoOo4",
+      "file": "agents/startup-qa-bot.json",
+      "error": null
+    },
+    {
+      "id": "qa-bot",
+      "name": "QA bot",
+      "creatorName": "Ulysses Ng",
+      "handle": "",
+      "categories": [
+        "Engineering"
+      ],
+      "description": "Acts as your QA on the live deploy: runs the acceptance checklist and says pass or fail before you ship.",
+      "updatedAt": "2026-09-25T20:44:27.200Z",
+      "url": "https://x.ai/bot/marketplace/bots/qa-bot",
+      "addHref": "/bot/lKQWoQAvYgg_7Bkg2R-m7",
+      "file": "agents/qa-bot.json",
+      "error": null
+    },
+    {
+      "id": "pm-bot",
+      "name": "PM bot",
+      "creatorName": "Ulysses Ng",
+      "handle": "",
+      "categories": [
+        "Product"
+      ],
+      "description": "Acts as your PM. Writes the dated cut: what's in, what's out, and how you'll know it's done. Engineering doesn't start until you approve it.",
+      "updatedAt": "2026-09-25T20:44:31.496Z",
+      "url": "https://x.ai/bot/marketplace/bots/pm-bot",
+      "addHref": "/bot/FeeqMRMJr2jwixCROZcIh",
+      "file": "agents/pm-bot.json",
+      "error": null
+    },
+    {
+      "id": "engineering-lead",
+      "name": "Engineering Lead",
+      "creatorName": "Lauren Tan",
+      "handle": "poteto",
+      "categories": [
+        "Engineering"
+      ],
+      "description": "An engineering lead that owns the loop: breaks work into Cloud Agents, chases CI, reviews, and stalls on a weekday cadence, and only pings you when something is blocked, ready to merge, or done. Best for eng leads and power users.",
+      "updatedAt": "2026-09-25T16:10:01.165Z",
+      "url": "https://x.ai/bot/marketplace/bots/engineering-lead",
+      "addHref": "/bot/Ks3X7JpD-6I86s3zkJFRh",
+      "file": "agents/engineering-lead.json",
+      "error": null
+    },
+    {
+      "id": "pfp-bot",
+      "name": "Pfp Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "description": "Turns your X photo, an upload, a selfie, or a pet pic into a tiny Grokbot-style icon with capsule eyes that keeps the hair, colors, and signature look. Style and prompt by @Multi_Serio_Ai.\nAsks for more photos when unsure, and never makes realistic likenesses or posts anything.",
+      "updatedAt": "2026-09-23T23:21:16.194Z",
+      "url": "https://x.ai/bot/marketplace/bots/pfp-bot",
+      "addHref": "/bot/eFnHzlDcKdoA406SzZbNZ",
+      "file": "agents/pfp-bot.json",
+      "error": null
+    },
+    {
+      "id": "import-bot",
+      "name": "Import Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "description": "Brings your setup from Claude Cowork, Codex, ChatGPT, OpenClaw, and Hermes into Grok Bot, then creates the expert bots that cover it or adds to the bots you already have. Changes nothing in the old tools and scrubs secrets before anything is saved.",
+      "updatedAt": "2026-09-22T18:42:27.855Z",
+      "url": "https://x.ai/bot/marketplace/bots/import-bot",
+      "addHref": "/bot/HP4Q8GHtSIjbyGeI2vg7S",
+      "file": "agents/import-bot.json",
+      "error": null
+    },
+    {
+      "id": "sequencer",
+      "name": "Sequencer",
+      "creatorName": "Simon Lackowski",
+      "handle": "",
+      "categories": [
+        "Sales"
+      ],
+      "description": "Runs your outbound sequencer as a staff function. Connects your tools, learns voice and ICP from Gmail and CRM, keeps sequence state on a sheet, and stages drafts you send.",
+      "updatedAt": "2026-09-21T21:30:03.244Z",
+      "url": "https://x.ai/bot/marketplace/bots/sequencer",
+      "addHref": "/bot/6xnxd_CHg0cXVMQCwnRrZ",
+      "file": "agents/sequencer.json",
+      "error": null
+    },
+    {
+      "id": "marketing-project-manager",
+      "name": "Project Manager",
+      "creatorName": "Josh Kim",
+      "handle": "joshkim",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Marketing project manager that coordinates research, positioning, landing pages, ads, and analytics across specialist bots \u2014 with screenshot check-ins and human gates on merge and spend.",
+      "updatedAt": "2026-09-21T01:46:15.724Z",
+      "url": "https://x.ai/bot/marketplace/bots/marketing-project-manager",
+      "addHref": "/bot/AMa1ig4YyoxfYtWFe7PLi",
+      "file": "agents/marketing-project-manager.json",
+      "error": null
+    },
+    {
+      "id": "marketing-analyst",
+      "name": "Marketing Analyst",
+      "creatorName": "Josh Kim",
+      "handle": "joshkim",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Google Ads\u2013first performance analyst: turns exports into weekly and monthly reports with commentary, answers reporting asks with real numbers, and watches spend against your thresholds so you catch what\u2019s breaking before it burns budget. Never posts or touches a campaign without your yes.",
+      "updatedAt": "2026-09-21T01:46:12.631Z",
+      "url": "https://x.ai/bot/marketplace/bots/marketing-analyst",
+      "addHref": "/bot/1RbG9yW5MpQ55XcQlJ0aQ",
+      "file": "agents/marketing-analyst.json",
+      "error": null
+    },
+    {
+      "id": "performance-marketer",
+      "name": "Performance Marketer",
+      "creatorName": "Josh Kim",
+      "handle": "joshkim",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "A performance marketer that turns Product Marketer ad copy into paused Maximize-clicks Google Ads Search shells for messaging tests \u2014 review sheets first, then traffic with live screenshots, no spend until you say so.",
+      "updatedAt": "2026-09-21T01:46:09.557Z",
+      "url": "https://x.ai/bot/marketplace/bots/performance-marketer",
+      "addHref": "/bot/JeNCKNe0ItsLMWYrLiRcb",
+      "file": "agents/performance-marketer.json",
+      "error": null
+    },
+    {
+      "id": "website-ops",
+      "name": "Website Ops",
+      "creatorName": "Josh Kim",
+      "handle": "joshkim",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Website operations and content manager. Ships site changes as PRs from your website repo, runs evidence-backed site audits (SEO, content, speed, a11y, CRO, schema), and turns Product Marketer briefs into landing-page PRs with in-chat screenshots.",
+      "updatedAt": "2026-09-21T01:46:06.198Z",
+      "url": "https://x.ai/bot/marketplace/bots/website-ops",
+      "addHref": "/bot/NYDai_DOI_2pNDIKerrpD",
+      "file": "agents/website-ops.json",
+      "error": null
+    },
+    {
+      "id": "product-marketer",
+      "name": "Product Marketer",
+      "creatorName": "Josh Kim",
+      "handle": "joshkim",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Learns your product, brand, tone, and positioning principles; uses competitive research to sharpen how you stand out; drafts and crafts copy against those principles; and hands off landing-page and Ads copy to the rest of the marketing team.",
+      "updatedAt": "2026-09-21T01:45:59.802Z",
+      "url": "https://x.ai/bot/marketplace/bots/product-marketer",
+      "addHref": "/bot/nXp4Rp2trKV8AK-RC1Ohf",
+      "file": "agents/product-marketer.json",
+      "error": null
+    },
+    {
+      "id": "market-researcher",
+      "name": "Market Researcher",
+      "creatorName": "Josh Kim",
+      "handle": "joshkim",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Monitors your competitors' public websites, ads, marketing, pricing, and positioning on a standing cadence. Collects what changed, flags moves you should know about, and suggests concrete strategy adjustments or pivots. Never posts or contacts anyone.",
+      "updatedAt": "2026-09-21T01:45:56.557Z",
+      "url": "https://x.ai/bot/marketplace/bots/market-researcher",
+      "addHref": "/bot/xzkXiUbdYfPd7g30OhLGf",
+      "file": "agents/market-researcher.json",
+      "error": null
+    },
+    {
+      "id": "stalk-bot",
+      "name": "Stalk Bot",
+      "creatorName": "Shub Gaur",
+      "handle": "shubgaur",
+      "categories": [
+        "From Grok Bot Team",
+        "Product"
+      ],
+      "description": "Signs up for your competitors' newsletters and products under its own research email, walks their onboarding on video, and watches their site, pricing, changelog, jobs, and X. Each pulse reports what changed against your positioning and closes with counterpositioning moves, and it never posts or contacts anyone.",
+      "updatedAt": "2026-09-15T21:51:57.350Z",
+      "url": "https://x.ai/bot/marketplace/bots/stalk-bot",
+      "addHref": "/bot/Y7iWVNiPdorgu6oFY-PRG",
+      "file": "agents/stalk-bot.json",
+      "error": null
+    },
+    {
+      "id": "ebr-value-deck-builder",
+      "name": "EBR & Value Deck Builder",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Builds an executive business review or value deck for a named account from your CRM, call history, and usage data, on your brand, and hands you an editable file. Never invents a number, and nothing goes to the customer without your yes.",
+      "updatedAt": "2026-09-10T21:44:01.229Z",
+      "url": "https://x.ai/bot/marketplace/bots/ebr-value-deck-builder",
+      "addHref": "/bot/yA2-Ti3sPVNFO-zRzkwuX",
+      "file": "agents/ebr-value-deck-builder.json",
+      "error": null
+    },
+    {
+      "id": "signal-prospector",
+      "name": "Signal Prospector",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Finds the accounts and people in your CRM and product data that just showed intent, ranks them, and drafts the first touch. Runs on a schedule, explains every signal, and nothing sends without your yes.",
+      "updatedAt": "2026-09-10T21:45:14.949Z",
+      "url": "https://x.ai/bot/marketplace/bots/signal-prospector",
+      "addHref": "/bot/wsbOPOkHApmIYLrErnC4e",
+      "file": "agents/signal-prospector.json",
+      "error": null
+    },
+    {
+      "id": "the-morning-newspaper",
+      "name": "The Morning Newspaper",
+      "creatorName": "Karen X. Cheng",
+      "handle": "karenxcheng",
+      "categories": [
+        "Personal"
+      ],
+      "description": "A newspaper customized to you. It pulls from your email and calendar, lays it out for you, and prints while you sleep. Created by @karenxcheng",
+      "updatedAt": "2026-09-04T19:00:07.111Z",
+      "url": "https://x.ai/bot/marketplace/bots/the-morning-newspaper",
+      "addHref": "/bot/1xAJYJPes3X7dUM2mk9Di",
+      "file": "agents/the-morning-newspaper.json",
+      "error": null
+    },
+    {
+      "id": "nightly-audit-engineer",
+      "name": "Nightly Audit Engineer",
+      "creatorName": "Lingxi Li",
+      "handle": "lingxi",
+      "categories": [
+        "From Grok Bot Team",
+        "Engineering"
+      ],
+      "description": "A nightly engineering auditor that researches a whole codebase, then ships one cleanup PR per area. Defaults to 4am and asks when to run before it starts.",
+      "updatedAt": "2026-09-03T10:01:13.032Z",
+      "url": "https://x.ai/bot/marketplace/bots/nightly-audit-engineer",
+      "addHref": "/bot/0LLQmzk-yzwHi0zuiV0lC",
+      "file": "agents/nightly-audit-engineer.json",
+      "error": null
+    },
+    {
+      "id": "office-ops-desk",
+      "name": "Office Ops Desk",
+      "creatorName": "Erika Cabrera",
+      "handle": "ericacabera",
+      "categories": [
+        "From Grok Bot Team",
+        "Operations"
+      ],
+      "description": "Tracks office shipments, facilities issues, and team birthdays, then writes the digests. Works from a pasted list or a spreadsheet, and never sends without you.",
+      "updatedAt": "2026-09-03T09:04:57.009Z",
+      "url": "https://x.ai/bot/marketplace/bots/office-ops-desk",
+      "addHref": "/bot/afZj-XnYkThA4MB7GfZK6",
+      "file": "agents/office-ops-desk.json",
+      "error": null
+    },
+    {
+      "id": "event-request-desk",
+      "name": "Event Request Desk",
+      "creatorName": "Emma Weyrauch",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Operations"
+      ],
+      "description": "Scores every event, sponsorship, and speaking ask, then drafts your yes or no. Works from a Slack channel or a paste, and never sends without you.",
+      "updatedAt": "2026-09-03T09:04:51.420Z",
+      "url": "https://x.ai/bot/marketplace/bots/event-request-desk",
+      "addHref": "/bot/hp7QlVUPuYUp09kc6IFAA",
+      "file": "agents/event-request-desk.json",
+      "error": null
+    },
+    {
+      "id": "call-follow-ups",
+      "name": "Call Follow-Ups",
+      "creatorName": "Daniel Brill",
+      "handle": "danielbrill_",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Turns each recorded call into a follow-up email in your voice, a next-steps note, and the CRM updates, including the qualification fields your team runs on. Watches Gong and Granola for new calls, and nothing sends or saves without your yes.",
+      "updatedAt": "2026-09-10T21:31:01.723Z",
+      "url": "https://x.ai/bot/marketplace/bots/call-follow-ups",
+      "addHref": "/bot/estQ8HWdKqhheDNmOGjcy",
+      "file": "agents/call-follow-ups.json",
+      "error": null
+    },
+    {
+      "id": "apple-search-ads-review",
+      "name": "Apple Search Ads Review",
+      "creatorName": "Chris Everett",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Reviews your Apple Search Ads spend against your cost per install target. Drafts the keyword, bid, and budget changes, and never touches your account.",
+      "updatedAt": "2026-09-03T09:05:07.331Z",
+      "url": "https://x.ai/bot/marketplace/bots/apple-search-ads-review",
+      "addHref": "/bot/gadc3bVOsg9iIwmzAGRve",
+      "file": "agents/apple-search-ads-review.json",
+      "error": null
+    },
+    {
+      "id": "hiring-activity-monitor",
+      "name": "Hiring Signals",
+      "creatorName": "Simon Lackowski",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Tracks hiring activity across selected companies and job sources. Highlights meaningful changes, matches them to accounts and owners, and passes the right context into research or prospecting workflows.",
+      "updatedAt": "2026-09-03T09:05:28.706Z",
+      "url": "https://x.ai/bot/marketplace/bots/hiring-activity-monitor",
+      "addHref": "/bot/EbF8AR1wEHSWCGOp9D1qK",
+      "file": "agents/hiring-activity-monitor.json",
+      "error": null
+    },
+    {
+      "id": "warm-intro-finder",
+      "name": "GTM Connections",
+      "creatorName": "Brian Joseph",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Finds credible ways into a target account through mutual contacts, past conversations, shared history, and prior meetings. Ranks the best paths, drafts the introduction ask, and tracks what happened.",
+      "updatedAt": "2026-09-03T09:17:45.734Z",
+      "url": "https://x.ai/bot/marketplace/bots/warm-intro-finder",
+      "addHref": "/bot/aUF_wTHXGWKU3-QPm6PmN",
+      "file": "agents/warm-intro-finder.json",
+      "error": null
+    },
+    {
+      "id": "pipeline-health-and-forecast",
+      "name": "Pipeline Pulse",
+      "creatorName": "Krista Letz",
+      "handle": "kristaletz",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Scans your full pipeline for movement, stale next steps, forecast risk, and CRM gaps. Shows what changed across the book and drafts the updates needed to keep the forecast honest.",
+      "updatedAt": "2026-09-03T09:06:45.965Z",
+      "url": "https://x.ai/bot/marketplace/bots/pipeline-health-and-forecast",
+      "addHref": "/bot/X-hZf_AreWNt-ZQPYs0Ev",
+      "file": "agents/pipeline-health-and-forecast.json",
+      "error": null
+    },
+    {
+      "id": "deal-qualification",
+      "name": "Deal Inspector",
+      "creatorName": "Jon Grigull",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Checks every deal that moved stage against your qualification criteria using the actual call transcripts. Quotes the evidence, flags what is missing, recommends promote or close, and proposes the CRM updates for your approval.",
+      "updatedAt": "2026-09-10T21:33:37.176Z",
+      "url": "https://x.ai/bot/marketplace/bots/deal-qualification",
+      "addHref": "/bot/vZfC76-4UC1XU7qC4m726",
+      "file": "agents/deal-qualification.json",
+      "error": null
+    },
+    {
+      "id": "prospector",
+      "name": "GTM Prospecting",
+      "creatorName": "Caro Scalercio",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Turns an ideal customer profile into a focused prospect list, adds useful context, and checks for existing relationships. Drafts first-touch email and LinkedIn messages for your review.",
+      "updatedAt": "2026-09-03T09:17:31.208Z",
+      "url": "https://x.ai/bot/marketplace/bots/prospector",
+      "addHref": "/bot/RpAQeGjhzaiO6_Rq_4fyC",
+      "file": "agents/prospector.json",
+      "error": null
+    },
+    {
+      "id": "account-research",
+      "name": "GTM Account Research",
+      "creatorName": "Stefan Markarian",
+      "handle": "",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Researches one account before a meeting, deal review, or account plan. Brings together company changes, key people, relationship history, open questions, and the sources behind every finding.",
+      "updatedAt": "2026-09-03T09:17:25.354Z",
+      "url": "https://x.ai/bot/marketplace/bots/account-research",
+      "addHref": "/bot/B6nsTFJlkGP4R-BbdIzeV",
+      "file": "agents/account-research.json",
+      "error": null
+    },
+    {
+      "id": "dial-bot",
+      "name": "dial bot",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "description": "Places outbound Bland AI phone calls when you ask, then reports what happened. On first use it asks for a Bland API key and voice.",
+      "updatedAt": "2026-09-03T16:16:32.292Z",
+      "url": "https://x.ai/bot/marketplace/bots/dial-bot",
+      "addHref": "/bot/tIas6udS9kSXpcAz6LFd1",
+      "file": "agents/dial-bot.json",
+      "error": null
+    },
+    {
+      "id": "skippy",
+      "name": "skippy",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "description": "A San Francisco street-cleaning assistant. Paste a Maps pin, address, or intersection and it tells you the next posted sweep on that curb. Uses public city data. Never claims a stall is legal.",
+      "updatedAt": "2026-09-03T16:16:32.740Z",
+      "url": "https://x.ai/bot/marketplace/bots/skippy",
+      "addHref": "/bot/X4NHZvN9cvBBS5EgdjsLx",
+      "file": "agents/skippy.json",
+      "error": null
+    },
+    {
+      "id": "writing-bot",
+      "name": "Writing Bot",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "A writing partner for drafting and revising essays, emails, docs, and other prose. It uses a structured revision workflow so the result is clearer and better organized while keeping the writer's meaning, facts, and voice.",
+      "updatedAt": "2026-09-03T03:35:07.450Z",
+      "url": "https://x.ai/bot/marketplace/bots/writing-bot",
+      "addHref": "/bot/wtq-j01kD7o8gQFx7E9zv",
+      "file": "agents/writing-bot.json",
+      "error": null
+    },
+    {
+      "id": "tech-demos",
+      "name": "Tech Demos",
+      "creatorName": "Matt Palmer",
+      "handle": "mattyp",
+      "categories": [
+        "From Grok Bot Team",
+        "Personal"
+      ],
+      "description": "Weekday X-bookmark scout that picks one new library to demo, asks for approval, then plans and builds it in a sticky monorepo with a Cursor cloud agent. For anyone who wants a daily public-tech playground, not a changelog digest.",
+      "updatedAt": "2026-09-03T16:16:33.881Z",
+      "url": "https://x.ai/bot/marketplace/bots/tech-demos",
+      "addHref": "/bot/PaYvPhWPSynlUwFqMX7nc",
+      "file": "agents/tech-demos.json",
+      "error": null
+    },
+    {
+      "id": "frank",
+      "name": "Executive Assistant",
+      "creatorName": "Natasha Kuo",
+      "handle": "tashatweetss",
+      "categories": [
+        "From Grok Bot Team",
+        "Operations"
+      ],
+      "description": "EA chief-of-staff bot for exec support: conference rooms, interview prep, leadership outreach, Slack channel inventories, sheet\u2194calendar checks, and birthday/anniversary calendar loads.",
+      "updatedAt": "2026-09-03T16:16:34.508Z",
+      "url": "https://x.ai/bot/marketplace/bots/frank",
+      "addHref": "/bot/_DnP777DCicZpaTtm9_h5",
+      "file": "agents/frank.json",
+      "error": null
+    },
+    {
+      "id": "company-docs-q-a",
+      "name": "Company Docs Q&A",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Answers product and how-to questions from live docs first, then connected knowledge sources, and always cites sources. Built for anyone who wants a trustworthy internal knowledge bot.",
+      "updatedAt": "2026-09-04T22:48:15.894Z",
+      "url": "https://x.ai/bot/marketplace/bots/company-docs-q-a",
+      "addHref": "/bot/GVAnpUah1K6PzJtG9EuG9",
+      "file": "agents/company-docs-q-a.json",
+      "error": null
+    },
+    {
+      "id": "customer-question-drafter",
+      "name": "Product Support Inbox Assistant",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Helps you find and draft answers to product questions. Never sends emails without you.",
+      "updatedAt": "2026-09-04T22:48:25.250Z",
+      "url": "https://x.ai/bot/marketplace/bots/customer-question-drafter",
+      "addHref": "/bot/Rw8d83KAzTYQWBAtAscin",
+      "file": "agents/customer-question-drafter.json",
+      "error": null
+    },
+    {
+      "id": "customer-call-coach",
+      "name": "Customer Call Coach & Assistant",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Briefs you before customer calls and coaches you after based on your performance.",
+      "updatedAt": "2026-09-04T22:48:35.488Z",
+      "url": "https://x.ai/bot/marketplace/bots/customer-call-coach",
+      "addHref": "/bot/v1lSvhJCo4UrNGZxc5Fw8",
+      "file": "agents/customer-call-coach.json",
+      "error": null
+    },
+    {
+      "id": "chief-health",
+      "name": "Chief Health Officer",
+      "creatorName": "AJAC",
+      "handle": "AJA_Cortes",
+      "categories": [
+        "Personal"
+      ],
+      "description": "You're the Chief Health Officer. Every day, ask if training happened. If it did not, rewrite the next session so the week still holds. Read whatever workout app, nutrition app, wearable, or lab source is connected. Do not invent numbers. Never diagnose, prescribe, or post.",
+      "updatedAt": "2026-09-03T09:12:03.915Z",
+      "url": "https://x.ai/bot/marketplace/bots/chief-health",
+      "addHref": "/bot/PwWb6fJXpeG857af6tEYi",
+      "file": "agents/chief-health.json",
+      "error": null
+    },
+    {
+      "id": "deal-hunting",
+      "name": "Deal Hunting",
+      "creatorName": "Shimecki",
+      "handle": "scheemunai",
+      "categories": [
+        "Personal"
+      ],
+      "description": "Landed-cost shopping: real prices, shipping and tax, preferred retailers. Watchlist optional. Never buys unless asked.",
+      "updatedAt": "2026-09-03T03:35:07.064Z",
+      "url": "https://x.ai/bot/marketplace/bots/deal-hunting",
+      "addHref": "/bot/yTeKCLayahHnMdHFG9GJg",
+      "file": "agents/deal-hunting.json",
+      "error": null
+    },
+    {
+      "id": "webby",
+      "name": "Webby",
+      "creatorName": "Farzad",
+      "handle": "farzyness",
+      "categories": [
+        "Personal"
+      ],
+      "description": "Website admin. Owns a personal site (rebuild + live fallback, exclusive long-form and newsletter) and a public weekday dashboard. Also owns newsletter sends: exclusive the same day a new piece ships; digest the next morning after that day's social pulse is finished. Create-only, no deletes. Strip AI-isms. Cost-lean. An orchestrator routes; this bot ships.",
+      "updatedAt": "2026-09-03T03:35:07.039Z",
+      "url": "https://x.ai/bot/marketplace/bots/webby",
+      "addHref": "/bot/BX4-kOUI2CzphgiYLZ1hb",
+      "file": "agents/webby.json",
+      "error": null
+    },
+    {
+      "id": "account-book",
+      "name": "Account Research Desk",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Researches the companies you sell to and writes your pre-call brief and account plan. Works from the public web and the notes you paste, and never sends without you.",
+      "updatedAt": "2026-09-03T16:16:37.664Z",
+      "url": "https://x.ai/bot/marketplace/bots/account-book",
+      "addHref": "/bot/O3iqVd_ZrdRtrDJpxcKss",
+      "file": "agents/account-book.json",
+      "error": null
+    },
+    {
+      "id": "customer-stories",
+      "name": "Customer Proof Desk",
+      "creatorName": "Anoop Baliga",
+      "handle": "akbaliga96",
+      "categories": [
+        "Sales"
+      ],
+      "description": "Turns call notes and transcripts into case studies, testimonials, and proof points. Quotes stay word for word from what you paste, and nothing publishes without your yes.",
+      "updatedAt": "2026-09-03T16:16:38.201Z",
+      "url": "https://x.ai/bot/marketplace/bots/customer-stories",
+      "addHref": "/bot/AamPlGjd2lIdDv6seEMXR",
+      "file": "agents/customer-stories.json",
+      "error": null
+    },
+    {
+      "id": "dan-lanning",
+      "name": "Partnerships Call Coach",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "categories": [
+        "From Grok Bot Team",
+        "Sales"
+      ],
+      "description": "Pitch and delivery coach for partnership, sponsorship, and high-stakes discovery calls. Reviews real call transcripts and returns sharp, evidence-based coaching \u2014 what landed, what to tighten, and exact phrasing upgrades \u2014 so feedback compounds over time.",
+      "updatedAt": "2026-09-03T09:49:34.142Z",
+      "url": "https://x.ai/bot/marketplace/bots/dan-lanning",
+      "addHref": "/bot/PlsyvUb0KnHIQr6psoy0L",
+      "file": "agents/dan-lanning.json",
+      "error": null
+    },
+    {
+      "id": "alfred",
+      "name": "Alfred",
+      "creatorName": "Robin Delta",
+      "handle": "heyrobinai",
+      "categories": [
+        "Operations"
+      ],
+      "description": "Designs, audits, and governs your Grok Bot organization so it matches real company outcomes, with clear human owners and no duplicate jobs. Recommends the smallest useful structure, defaults new bots to zero, and never creates or changes anything without your exact yes.",
+      "updatedAt": "2026-09-04T17:39:31.716Z",
+      "url": "https://x.ai/bot/marketplace/bots/alfred",
+      "addHref": "/bot/p7Gh6HIrfv4AGzIow6-9X",
+      "file": "agents/alfred.json",
+      "error": null
+    },
+    {
+      "id": "leadsworth",
+      "name": "Lead Pipeline Desk",
+      "creatorName": "Miguel Cruz",
+      "handle": "cruzmiguel000",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Scores your inbound leads, merges duplicates, assigns an owner, and flags what's stuck. Works from a CRM export, a sheet, or a paste, and never sends anything without you.",
+      "updatedAt": "2026-09-03T16:16:40.060Z",
+      "url": "https://x.ai/bot/marketplace/bots/leadsworth",
+      "addHref": "/bot/oPDkINUfpUXhJDdsfRZht",
+      "file": "agents/leadsworth.json",
+      "error": null
+    },
+    {
+      "id": "tally",
+      "name": "Paid Media Report Desk",
+      "creatorName": "Miguel Cruz",
+      "handle": "cruzmiguel000",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Turns your Google Ads, Meta, and LinkedIn exports into one weekly report with commentary. Answers reporting asks in Slack with real numbers, and never posts without your yes.",
+      "updatedAt": "2026-09-03T06:40:48.597Z",
+      "url": "https://x.ai/bot/marketplace/bots/tally",
+      "addHref": "/bot/qBFjPRQ3IbHG69qIFHblE",
+      "file": "agents/tally.json",
+      "error": null
+    },
+    {
+      "id": "luma-pages",
+      "name": "Luma Pages",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Builds and updates private Luma event pages for field marketers \u2014 copy, branding, registration settings, capacity and waitlist, and registration-list hygiene. Pairs with a Notion docs agent so the event brief and Luma page stay in sync.",
+      "updatedAt": "2026-09-03T03:35:06.601Z",
+      "url": "https://x.ai/bot/marketplace/bots/luma-pages",
+      "addHref": "/bot/jHT5FLhpCMx7JeIq9BEHY",
+      "file": "agents/luma-pages.json",
+      "error": null
+    },
+    {
+      "id": "wtd",
+      "name": "WTD",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "WTD is a VIP hospitality planning partner for marketing ops \u2014 project-plan and status rhythm across tentpoles and ticket banks, nomination-sheet tracking, marketing-visible status hubs, and decks or agendas. Sales owns guest inviting; this bot keeps the plan and status clean without dumping private notes onto shared pages.",
+      "updatedAt": "2026-09-03T03:35:06.574Z",
+      "url": "https://x.ai/bot/marketplace/bots/wtd",
+      "addHref": "/bot/Q3VCc_x0Y8lWd4m-rung2",
+      "file": "agents/wtd.json",
+      "error": null
+    },
+    {
+      "id": "event-producer",
+      "name": "Event Producer",
+      "creatorName": "Jenna Nanpei",
+      "handle": "jennananpei",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Turns your event details into a run of show, guest list, and day-of checklist. Tracks vendors, guests, dietary needs, and travel, and never sends a message without you.",
+      "updatedAt": "2026-09-03T06:40:41.257Z",
+      "url": "https://x.ai/bot/marketplace/bots/event-producer",
+      "addHref": "/bot/wtEIGNZ8oipDDVQTDHMPB",
+      "file": "agents/event-producer.json",
+      "error": null
+    },
+    {
+      "id": "last30days",
+      "name": "last30days",
+      "creatorName": "Matt Van Horn",
+      "handle": "mvanhorn",
+      "categories": [
+        "Product",
+        "Marketing"
+      ],
+      "description": "Research what people actually say about any topic in the last 30 days. Installs the latest last30days skill from GitHub, walks first-run setup (ScrapeCreators via GitHub for the full free credits, X, YouTube, and the free CLIs), then writes a grounded brief from Reddit, X, YouTube, TikTok, Hacker News, Polymarket, GitHub, and the web. Checks GitHub for a new skill version every 30 days.",
+      "updatedAt": "2026-09-04T23:13:40.055Z",
+      "url": "https://x.ai/bot/marketplace/bots/last30days",
+      "addHref": "/bot/TxB-fy1KryaYJLYWBcGtT",
+      "file": "agents/last30days.json",
+      "error": null
+    },
+    {
+      "id": "site-audit",
+      "name": "Site Audit",
+      "creatorName": "Shimecki",
+      "handle": "scheemunai",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "SEO + content + speed + a11y + CRO + schema audit. Scored, P0/P1/P2, evidence URLs. Monthly diff. No invented metrics.",
+      "updatedAt": "2026-09-03T03:35:06.480Z",
+      "url": "https://x.ai/bot/marketplace/bots/site-audit",
+      "addHref": "/bot/_rzRrKKlUyBD3znUN5b3Q",
+      "file": "agents/site-audit.json",
+      "error": null
+    },
+    {
+      "id": "x-brief",
+      "name": "X Brief",
+      "creatorName": "Dan McAteer",
+      "handle": "daniel_mac8",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Turns the accounts and topics you pick on X into one short daily brief. Reads your X connection or handles you paste, and never posts on your behalf.",
+      "updatedAt": "2026-09-03T06:25:45.139Z",
+      "url": "https://x.ai/bot/marketplace/bots/x-brief",
+      "addHref": "/bot/RO8GwQZFXL9O95i13epqF",
+      "file": "agents/x-brief.json",
+      "error": null
+    },
+    {
+      "id": "competitor-watching",
+      "name": "Competitor Watch",
+      "creatorName": "Shimecki",
+      "handle": "scheemunai",
+      "categories": [
+        "Product"
+      ],
+      "description": "Tracks competitor pricing, product, and hiring pages and briefs you on real changes. Starts from a list of URLs you paste.",
+      "updatedAt": "2026-09-03T04:30:10.803Z",
+      "url": "https://x.ai/bot/marketplace/bots/competitor-watching",
+      "addHref": "/bot/aw0Zj54sIsAK7vMnajdz0",
+      "file": "agents/competitor-watching.json",
+      "error": null
+    },
+    {
+      "id": "product-idea-stress-test",
+      "name": "Product Idea Stress Test",
+      "creatorName": "Hiten Shah",
+      "handle": "hnshah",
+      "categories": [
+        "Product"
+      ],
+      "description": "Investigates a product or startup idea for founders. Surfaces what has to be true, evidence for and against, the assumption most likely to kill it, and what to test next.",
+      "updatedAt": "2026-09-03T03:35:06.357Z",
+      "url": "https://x.ai/bot/marketplace/bots/product-idea-stress-test",
+      "addHref": "/bot/ph-u_zkF5Vui1GdGnysn9",
+      "file": "agents/product-idea-stress-test.json",
+      "error": null
+    },
+    {
+      "id": "fuse",
+      "name": "Ad Spend Watch",
+      "creatorName": "Miguel Cruz",
+      "handle": "cruzmiguel000",
+      "categories": [
+        "From Grok Bot Team",
+        "Marketing"
+      ],
+      "description": "Watches your ad spend and performance and flags what's breaking before it burns budget. Works from a pasted export, and never pauses a campaign without your yes.",
+      "updatedAt": "2026-09-03T06:40:41.219Z",
+      "url": "https://x.ai/bot/marketplace/bots/fuse",
+      "addHref": "/bot/MK5zStpj_As8CsRwg3r6w",
+      "file": "agents/fuse.json",
+      "error": null
+    },
+    {
+      "id": "nyc-parent",
+      "name": "NYC Parent",
+      "creatorName": "Dennison",
+      "handle": "DennisonBertram",
+      "categories": [
+        "Personal"
+      ],
+      "description": "A family chief of staff for New York City parents. It tracks school, calendar, activities, and household logistics, turns incoming information into next actions, and keeps adults in control of spending, messages, and private information.",
+      "updatedAt": "2026-09-03T03:35:06.267Z",
+      "url": "https://x.ai/bot/marketplace/bots/nyc-parent",
+      "addHref": "/bot/cht7ytAhe3euOQy2wnEg9",
+      "file": "agents/nyc-parent.json",
+      "error": null
+    },
+    {
+      "id": "love",
+      "name": "Love \u2764\ufe0f",
+      "creatorName": "Danny Buck",
+      "handle": "dannybuck",
+      "categories": [
+        "Personal"
+      ],
+      "description": "Takes the admin out of being a good Partner so the attention can go where it counts. Reminds, researches, and queues dates, tables, and presents; you book, buy, and show up.",
+      "updatedAt": "2026-09-03T03:35:06.185Z",
+      "url": "https://x.ai/bot/marketplace/bots/love",
+      "addHref": "/bot/qDtCI8WZgVJKbN3rogL8j",
+      "file": "agents/love.json",
+      "error": null
+    },
+    {
+      "id": "best-video-editor",
+      "name": "Video Edit Desk",
+      "creatorName": "X Freeze",
+      "handle": "xfreeze",
+      "categories": [
+        "Marketing"
+      ],
+      "description": "Turns uploaded footage into cut clips, burned-in captions, and platform-sized exports. Works from your notes and never overwrites the original.",
+      "updatedAt": "2026-09-03T06:33:09.398Z",
+      "url": "https://x.ai/bot/marketplace/bots/best-video-editor",
+      "addHref": "/bot/kGiyk73f5CF8XtBMIh0gW",
+      "file": "agents/best-video-editor.json",
+      "error": null
+    },
+    {
+      "id": "seed-a91e4c",
+      "name": "SWE",
+      "creatorName": "Cursor",
+      "handle": "cursor_ai",
+      "categories": [
+        "Engineering"
+      ],
+      "description": "Cursor's software engineer bot: writes code, triages issues, monitors production, and more.",
+      "updatedAt": "2026-08-29T00:00:00.000Z",
+      "url": "https://x.ai/bot/marketplace/bots/seed-a91e4c",
+      "addHref": "/bot/sd4474cf03cd8552905ff",
+      "file": "agents/seed-a91e4c.json",
+      "error": null
+    }
+  ]
+}
