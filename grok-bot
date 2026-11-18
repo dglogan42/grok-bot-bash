@@ -87,14 +87,20 @@ slugify() {
 }
 
 ensure_data() {
-  mkdir -p "$DATA/bots"
-  chmod 700 "$DATA" "$DATA/bots" || true
+  mkdir -p -- "$DATA/bots" || return 1
+  # Only the bots directory is tightened. The data directory may be one the
+  # user already uses for other files.
+  chmod 700 -- "$DATA/bots" || true
 }
 
 load_bot() {
   local slug=$1
   BOT_SLUG=$slug
   BOT_DIR=$DATA/bots/$slug
+  if [[ ! -f "$BOT_DIR/name" || ! -f "$BOT_DIR/job" ]]; then
+    printf 'bot data incomplete: %s\n' "$BOT_DIR" >&2
+    return 1
+  fi
   BOT_NAME=$(<"$BOT_DIR/name")
   BOT_JOB=$(<"$BOT_DIR/job")
   BOT_MEMORY=$BOT_DIR/memory.md
@@ -170,6 +176,7 @@ list_bots() {
   shopt -s nullglob
   for d in "$DATA/bots"/*; do
     [[ -d "$d" ]] || continue
+    [[ -f "$d/name" && -f "$d/job" ]] || continue
     any=1
     printf '%s\t%s — %s\n' "$(basename "$d")" "$(<"$d/name")" "$(<"$d/job")"
   done
@@ -177,6 +184,18 @@ list_bots() {
   if [[ "$any" == 0 ]]; then
     printf '(no bots)\n'
   fi
+}
+
+sanitize_display() {
+  # Drop most control characters so a command cannot redraw the approval line.
+  # Tab stays. Carriage return is shown as the two characters \r.
+  printf '%s' "$1" | tr -d '\000-\010\013\014\016-\037' | sed 's/\r/\\r/g'
+}
+
+answer_yes() {
+  local ans=$1
+  ans=${ans,,}
+  [[ "$ans" == "y" || "$ans" == "yes" ]]
 }
 
 approve() {
@@ -192,8 +211,9 @@ approve() {
     printf 'denied (no terminal). Re-run with --yes to approve.\n' >&2
     return 1
   fi
+  prompt=$(sanitize_display "$prompt")
   read -r -p "$prompt [y/N] " ans </dev/tty || return 1
-  [[ "$ans" == "y" || "$ans" == "Y" || "$ans" == "yes" || "$ans" == "YES" ]]
+  answer_yes "$ans"
 }
 
 # Resolve a user-supplied path.
@@ -230,19 +250,31 @@ tool_run() {
     jq -cn '{ok:false, error:"missing command"}'
     return 0
   fi
-  printf 'run: %s\n' "$cmd" >&2
+  printf 'run: %s\n' "$(sanitize_display "$cmd")" >&2
   if ! approve "Approve this command?"; then
     jq -cn '{ok:false, error:"The user did not approve this command."}'
     return 0
   fi
+  local outf
+  outf=$(mktemp)
   set +e
-  out=$(cd "$BOT_WORKSPACE" && timeout --signal=TERM 120 bash -lc "$cmd" 2>&1)
+  (
+    cd "$BOT_WORKSPACE" || exit 126
+    # Non-login shell, stdin closed, and a hard kill if it ignores TERM.
+    timeout --signal=TERM --kill-after=5s 120 bash -c "$cmd" </dev/null >"$outf" 2>&1
+  )
   status=$?
   set -e
-  if [[ ${#out} -gt 20000 ]]; then
-    out=${out:0:20000}
-    out+=$'\n[truncated]'
+  if [[ $(wc -c < "$outf") -gt 20000 ]]; then
+    local cut
+    cut=$(mktemp)
+    head -c 20000 "$outf" >"$cut"
+    printf '\n[truncated]' >>"$cut"
+    mv -T -- "$cut" "$outf"
   fi
+  out=$(cat "$outf"; printf x)
+  out=${out%x}
+  rm -f -- "$outf"
   RAN_NOTES+=$'\n'"[ran] $cmd (exit $status)"
   jq -cn --arg output "$out" --argjson status "$status" '{ok:true, exit:$status, output:$output}'
 }
@@ -259,8 +291,16 @@ tool_read() {
     jq -cn '{ok:false, error:"path escapes the workspace"}'
     return 0
   fi
-  if [[ ! -f "$path" ]]; then
-    jq -cn --arg path "$path" '{ok:false, error:"not a file", path:$path}'
+  local ws
+  ws=$(realpath -m "$BOT_WORKSPACE")
+  if [[ "$input" == /* && "$path" != "$ws" && "$path" != "$ws"/* ]]; then
+    if ! approve "Approve reading outside the workspace?"; then
+      jq -cn '{ok:false, error:"The user did not approve this read."}'
+      return 0
+    fi
+  fi
+  if [[ ! -f "$path" || ! -r "$path" ]]; then
+    jq -cn --arg path "$path" '{ok:false, error:"not readable", path:$path}'
     return 0
   fi
   # A NUL in the first 20KB means this is not a text file. The pipeline
@@ -275,7 +315,11 @@ tool_read() {
     jq -cn --arg path "$path" '{ok:false, error:"binary file", path:$path}'
     return 0
   fi
-  raw=$(head -c 20000 "$path" || true)
+  if ! raw=$(head -c 20000 "$path"; printf x); then
+    jq -cn --arg path "$path" '{ok:false, error:"read failed", path:$path}'
+    return 0
+  fi
+  raw=${raw%x}
   if [[ $(wc -c < "$path") -gt 20000 ]]; then
     raw+=$'\n[truncated]'
   fi
@@ -299,13 +343,40 @@ tool_write() {
     jq -cn '{ok:false, error:"path escapes the workspace"}'
     return 0
   fi
-  printf 'write: %s (%s bytes)\n' "$path" "${#content}" >&2
+  printf 'write: %s (%s bytes)\n' "$(sanitize_display "$path")" "${#content}" >&2
   if ! approve "Approve this write?"; then
     jq -cn '{ok:false, error:"The user did not approve this write."}'
     return 0
   fi
-  mkdir -p "$(dirname "$path")"
-  printf '%s' "$content" > "$path"
+  local dir tmp links
+  dir=$(dirname -- "$path")
+  if ! mkdir -p -- "$dir"; then
+    jq -cn --arg path "$path" '{ok:false, error:"mkdir failed", path:$path}'
+    return 0
+  fi
+  # Replacing a hard link would change the inode shared with a name outside
+  # this directory. Refuse, and write a new inode when the name is unique.
+  if [[ -e "$path" ]]; then
+    links=$(stat -c %h -- "$path" 2>/dev/null || echo 1)
+    if [[ "$links" -gt 1 ]]; then
+      jq -cn --arg path "$path" '{ok:false, error:"refusing hard link", path:$path}'
+      return 0
+    fi
+  fi
+  tmp=$(mktemp -- "$dir/.grok-bot.XXXXXX") || {
+    jq -cn '{ok:false, error:"mktemp failed"}'
+    return 0
+  }
+  if ! printf '%s' "$content" >"$tmp"; then
+    rm -f -- "$tmp"
+    jq -cn '{ok:false, error:"write failed"}'
+    return 0
+  fi
+  if ! mv -T -- "$tmp" "$path"; then
+    rm -f -- "$tmp"
+    jq -cn '{ok:false, error:"rename failed"}'
+    return 0
+  fi
   RAN_NOTES+=$'\n'"[wrote] $path"
   jq -cn --arg path "$path" --argjson bytes "${#content}" '{ok:true, path:$path, bytes:$bytes}'
 }
@@ -332,6 +403,11 @@ tool_remember() {
   fact=$(jq -r '.fact // empty' <<<"$args")
   if [[ -z "$fact" ]]; then
     jq -cn '{ok:false, error:"missing fact"}'
+    return 0
+  fi
+  printf 'remember: %s\n' "$(sanitize_display "$fact")" >&2
+  if ! approve "Approve saving this to memory?"; then
+    jq -cn '{ok:false, error:"The user did not approve this memory write."}'
     return 0
   fi
   printf -- '- %s — %s\n' "$(date -Iseconds)" "$fact" >> "$BOT_MEMORY"
@@ -475,16 +551,26 @@ call_model() {
     printf 'could not build the API request\n' >&2
     return 1
   fi
-  if ! code=$(curl -sS --max-time 180 -o "$http" -w '%{http_code}' \
-    -H "Authorization: Bearer ${XAI_API_KEY}" \
+  if [[ "$XAI_API_KEY" == *$'\n'* || "$XAI_API_KEY" == *'"'* ]]; then
+    rm -f "$body" "$http"
+    printf 'XAI_API_KEY contains a character the curl config cannot quote safely\n' >&2
+    return 1
+  fi
+  local hdr
+  hdr=$(mktemp)
+  chmod 600 "$hdr"
+  printf 'header = "Authorization: Bearer %s"\n' "$XAI_API_KEY" >"$hdr"
+  # -q ignores ~/.curlrc. -K keeps the key out of the process list.
+  if ! code=$(curl -q -sS --max-time 180 -o "$http" -w '%{http_code}' \
+    -K "$hdr" \
     -H "Content-Type: application/json" \
     -d @"$body" \
     "$API/responses"); then
-    rm -f "$body" "$http"
+    rm -f "$body" "$http" "$hdr"
     printf 'could not reach %s\n' "$API" >&2
     return 1
   fi
-  rm -f "$body"
+  rm -f "$body" "$hdr"
   if [[ "$code" != 2* ]]; then
     printf 'Grok API returned HTTP %s\n' "$code" >&2
     if jq -e . >/dev/null 2>&1 <"$http"; then
@@ -580,10 +666,18 @@ routine_add() {
   [[ -n "$slug" ]] || { printf 'routine name needs a letter or number\n' >&2; return 1; }
   tmp=$(mktemp)
   if [[ -s "$BOT_DIR/routines.jsonl" ]]; then
-    jq -c --arg name "$slug" 'select(.name != $name)' "$BOT_DIR/routines.jsonl" >"$tmp" || true
+    if ! jq -c --arg name "$slug" 'select(.name != $name)' "$BOT_DIR/routines.jsonl" >"$tmp"; then
+      rm -f -- "$tmp"
+      printf 'routine file is not valid JSONL; not modified\n' >&2
+      return 1
+    fi
   fi
-  jq -cn --arg name "$slug" --arg prompt "$prompt" '{name:$name, prompt:$prompt}' >>"$tmp"
-  mv "$tmp" "$BOT_DIR/routines.jsonl"
+  if ! jq -cn --arg name "$slug" --arg prompt "$prompt" '{name:$name, prompt:$prompt}' >>"$tmp"; then
+    rm -f -- "$tmp"
+    printf 'could not write the routine\n' >&2
+    return 1
+  fi
+  mv -T -- "$tmp" "$BOT_DIR/routines.jsonl"
   printf 'routine %s saved\n' "$slug" >&2
   printf 'cron example: 0 8 * * 1-5 %s --bot %s routine run %s\n' "$0" "$BOT_SLUG" "$slug" >&2
   printf 'Add --yes only when that cron job should run shell commands with no prompt.\n' >&2
@@ -604,9 +698,13 @@ routine_remove() {
   [[ -n "$slug" ]] || { printf 'usage: %s routine remove NAME\n' "$(cmd_name)" >&2; return 1; }
   tmp=$(mktemp)
   if [[ -s "$BOT_DIR/routines.jsonl" ]]; then
-    jq -c --arg name "$slug" 'select(.name != $name)' "$BOT_DIR/routines.jsonl" >"$tmp" || true
+    if ! jq -c --arg name "$slug" 'select(.name != $name)' "$BOT_DIR/routines.jsonl" >"$tmp"; then
+      rm -f -- "$tmp"
+      printf 'routine file is not valid JSONL; not modified\n' >&2
+      return 1
+    fi
   fi
-  mv "$tmp" "$BOT_DIR/routines.jsonl"
+  mv -T -- "$tmp" "$BOT_DIR/routines.jsonl"
   printf 'removed %s\n' "$slug" >&2
 }
 
@@ -615,12 +713,23 @@ routine_run() {
   name=${1:-}
   slug=$(slugify "$name")
   [[ -n "$slug" ]] || { printf 'usage: %s routine run NAME\n' "$(cmd_name)" >&2; return 1; }
-  prompt=$(jq -r --arg name "$slug" 'select(.name == $name) | .prompt' "$BOT_DIR/routines.jsonl" | head -n 1)
-  if [[ -z "$prompt" ]]; then
+  if ! prompt=$(routine_prompt "$slug"); then
     printf 'no routine: %s\n' "$name" >&2
     return 1
   fi
   converse "$prompt"
+}
+
+routine_prompt() {
+  local slug=$1
+  local prompt
+  [[ -s "$BOT_DIR/routines.jsonl" ]] || return 1
+  if ! prompt=$(jq -sr --arg name "$slug" 'map(select(.name == $name)) | if length == 0 then "" else .[0].prompt end' "$BOT_DIR/routines.jsonl"); then
+    printf 'routine file is not valid JSONL\n' >&2
+    return 1
+  fi
+  [[ -n "$prompt" ]] || return 1
+  printf '%s' "$prompt"
 }
 
 routine_cli() {
@@ -745,10 +854,51 @@ self_test() {
     printf 'self-test failed: list_dir escaped the workspace\n' >&2
     return 1
   fi
+  printf 'hi' >"$BOT_WORKSPACE/linked.txt"
+  ln "$BOT_WORKSPACE/linked.txt" "$BOT_WORKSPACE/linked-again.txt"
+  result=$(dispatch write_file '{"path":"linked.txt","content":"changed"}')
+  grep -q 'refusing hard link' <<<"$result"
+  grep -q 'hi' "$BOT_WORKSPACE/linked.txt"
+  result=$(dispatch run_command '{"command":"if shopt -q login_shell; then echo LOGIN; else echo NOLOGIN; fi"}')
+  grep -q 'NOLOGIN' <<<"$result"
+  result=$(dispatch run_command '{"command":"read -r x || echo EMPTY"}')
+  grep -q 'EMPTY' <<<"$result"
+  answer_yes 'Yes'
+  if answer_yes 'nope'; then
+    printf 'self-test failed: nope was treated as approval\n' >&2
+    return 1
+  fi
+  printf 'not-json\n' >"$BOT_DIR/routines.jsonl"
+  if routine_add other "nope" >/dev/null; then
+    printf 'self-test failed: bad routine file was replaced\n' >&2
+    return 1
+  fi
+  grep -q 'not-json' "$BOT_DIR/routines.jsonl"
+  : >"$BOT_DIR/routines.jsonl"
+  routine_add multi "$(printf 'line one\nline two')" >/dev/null
+  [[ "$(routine_prompt multi)" == $'line one\nline two' ]]
+  mkdir -p "$DATA/bots/broken"
+  if list_bots | grep -q $'^broken\t'; then
+    printf 'self-test failed: incomplete bot was listed\n' >&2
+    return 1
+  fi
   YES=0
   GROK_BOT_DENY=1
   result=$(dispatch run_command '{"command":"printf no"}')
   grep -q 'did not approve' <<<"$result"
+  result=$(dispatch remember '{"fact":"should not save"}')
+  grep -q 'did not approve' <<<"$result"
+  if grep -q 'should not save' "$BOT_MEMORY"; then
+    printf 'self-test failed: memory was saved without approval\n' >&2
+    return 1
+  fi
+  local outside=$tmp/outside-read.txt
+  printf 'secret\n' >"$outside"
+  result=$(dispatch read_file "$(jq -cn --arg path "$outside" '{path:$path}')")
+  grep -q 'did not approve' <<<"$result"
+  YES=1
+  result=$(dispatch read_file "$(jq -cn --arg path "$outside" '{path:$path}')")
+  grep -q 'secret' <<<"$result"
   routine_add morning "Say good morning" >/dev/null
   routine_list | grep -q $'^morning\tSay good morning$'
   printf 'self-test passed\n'

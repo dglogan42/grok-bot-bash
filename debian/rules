@@ -22,6 +22,8 @@ binary-indep: build-indep
 	gzip -9n -c debian/changelog > $(DEST)/usr/share/doc/$(PKG)/changelog.gz
 	chmod 0644 $(DEST)/usr/share/doc/$(PKG)/changelog.gz
 	mkdir -p $(DEST)/DEBIAN
+	(cd $(DEST) && find . -type f ! -path './DEBIAN/*' -exec md5sum {} + | sed 's|  \./|  |') > $(DEST)/DEBIAN/md5sums
+	chmod 0644 $(DEST)/DEBIAN/md5sums
 	dpkg-gencontrol -P$(DEST)
 	dpkg-deb --root-owner-group --build $(DEST) ..
 	rm -rf $(DEST)
