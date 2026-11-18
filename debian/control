@@ -1,0 +1,14 @@
+Source: grok-bot-bash
+Section: utils
+Priority: optional
+Maintainer: oem <oem@localhost>
+Standards-Version: 4.7.0
+Rules-Requires-Root: no
+Build-Depends: dpkg-dev
+
+Package: grok-bot-bash
+Architecture: all
+Depends: bash (>= 4.2), curl, jq, coreutils, ca-certificates
+Description: bash teammate for Grok
+ Chat with Grok from the shell. Each bot keeps a memory file and a
+ workspace, and shell commands run only after you approve them.

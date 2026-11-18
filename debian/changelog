@@ -1,0 +1,5 @@
+grok-bot-bash (1.0.0) unstable; urgency=medium
+
+  * Initial bash Grok Bot: chat, memory, and approved local commands.
+
+ -- oem <oem@localhost>  Wed, 18 Nov 2026 17:29:05 +1300

@@ -1,0 +1,822 @@
+#!/usr/bin/env bash
+# Grok Bot, bash edition.
+# Chats with grok-4.7, keeps a memory file per bot, and runs local
+# commands only after you approve them.
+#
+# Rebuild the binary package from this source tree:
+#   dpkg-buildpackage -us -uc
+set -euo pipefail
+
+DATA="${XDG_DATA_HOME:-$HOME/.local/share}/grok-bot"
+MODEL="${GROK_BOT_MODEL:-grok-4.7}"
+API="${GROK_BOT_API:-https://api.x.ai/v1}"
+YES="${GROK_BOT_YES:-0}"
+BOT_OPT=""
+BOT_SLUG=""
+BOT_DIR=""
+BOT_NAME=""
+BOT_JOB=""
+BOT_MEMORY=""
+BOT_TRANSCRIPT=""
+BOT_WORKSPACE=""
+RAN_NOTES=""
+
+cmd_name() {
+  basename "$0"
+}
+
+usage() {
+  cat <<EOF
+Usage:
+  $(cmd_name) [options] [message]
+  $(cmd_name) new NAME [--job TEXT]
+  $(cmd_name) list
+  $(cmd_name) use NAME
+  $(cmd_name) memory [edit]
+  $(cmd_name) routine add NAME PROMPT
+  $(cmd_name) routine list
+  $(cmd_name) routine run NAME
+  $(cmd_name) routine remove NAME
+  $(cmd_name) self-test
+
+Options:
+  --bot NAME      Use this bot instead of the current one
+  --yes           Approve commands and file writes without asking
+  --data-dir DIR  Store bots here (default: \$XDG_DATA_HOME/grok-bot)
+  -h, --help      Show this help
+
+With no message, start a chat. In chat, type /help.
+
+Set XAI_API_KEY before chatting. Requests go to \${API}/responses
+using model \$GROK_BOT_MODEL (default: grok-4.7).
+EOF
+}
+
+chat_help() {
+  cat <<EOF
+/help                     Show chat commands
+/quit                     Leave the chat
+/bots                     List bots
+/use NAME                 Switch bot
+/new NAME                 Create a bot and switch to it
+/job TEXT                 Set this bot's job
+/memory                   Show memory
+/routine add NAME PROMPT  Save a routine
+/routine list             List routines
+/routine run NAME         Run a saved routine now
+/routine remove NAME      Delete a routine
+EOF
+}
+
+need() {
+  local bin
+  for bin in "$@"; do
+    if ! command -v "$bin" >/dev/null 2>&1; then
+      printf 'missing required command: %s\n' "$bin" >&2
+      return 1
+    fi
+  done
+}
+
+slugify() {
+  local s
+  s=$(printf '%s' "$1" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//')
+  s=${s:0:64}
+  s=${s%-}
+  printf '%s' "$s"
+}
+
+ensure_data() {
+  mkdir -p "$DATA/bots"
+  chmod 700 "$DATA" "$DATA/bots" || true
+}
+
+load_bot() {
+  local slug=$1
+  BOT_SLUG=$slug
+  BOT_DIR=$DATA/bots/$slug
+  BOT_NAME=$(<"$BOT_DIR/name")
+  BOT_JOB=$(<"$BOT_DIR/job")
+  BOT_MEMORY=$BOT_DIR/memory.md
+  BOT_TRANSCRIPT=$BOT_DIR/transcript.jsonl
+  BOT_WORKSPACE=$BOT_DIR/workspace
+  mkdir -p "$BOT_WORKSPACE"
+}
+
+create_bot() {
+  local name=$1
+  local job=$2
+  local slug
+  [[ -n "$name" ]] || { printf 'usage: %s new NAME [--job TEXT]\n' "$(cmd_name)" >&2; return 1; }
+  slug=$(slugify "$name")
+  [[ -n "$slug" ]] || { printf 'bot name needs a letter or number\n' >&2; return 1; }
+  if [[ -d "$DATA/bots/$slug" ]]; then
+    printf 'bot already exists: %s\n' "$name" >&2
+    return 1
+  fi
+  ensure_data
+  local dir=$DATA/bots/$slug
+  mkdir -p "$dir/workspace"
+  chmod 700 "$dir" || true
+  printf '%s\n' "$name" > "$dir/name"
+  printf '%s\n' "$job" > "$dir/job"
+  printf '%s\n' '# Memory' > "$dir/memory.md"
+  : > "$dir/transcript.jsonl"
+  : > "$dir/routines.jsonl"
+  printf '%s\n' "$slug" > "$DATA/current"
+  load_bot "$slug"
+  printf 'created %s (%s)\n' "$name" "$slug" >&2
+}
+
+switch_bot() {
+  local slug
+  [[ -n ${1:-} ]] || { printf 'usage: %s use NAME\n' "$(cmd_name)" >&2; return 1; }
+  slug=$(slugify "$1")
+  [[ -n "$slug" && -d "$DATA/bots/$slug" ]] || { printf 'no bot: %s\n' "$1" >&2; return 1; }
+  ensure_data
+  printf '%s\n' "$slug" > "$DATA/current"
+  load_bot "$slug"
+  printf 'using %s\n' "$BOT_NAME" >&2
+}
+
+ensure_bot() {
+  ensure_data
+  if [[ -n "$BOT_OPT" ]]; then
+    local slug
+    slug=$(slugify "$BOT_OPT")
+    [[ -n "$slug" && -d "$DATA/bots/$slug" ]] || { printf 'no bot: %s\n' "$BOT_OPT" >&2; return 1; }
+    load_bot "$slug"
+    return 0
+  fi
+  if [[ -f "$DATA/current" ]]; then
+    local slug
+    slug=$(<"$DATA/current")
+    if [[ -n "$slug" && -d "$DATA/bots/$slug" ]]; then
+      load_bot "$slug"
+      return 0
+    fi
+  fi
+  if [[ ! -d "$DATA/bots/grok-bot" ]]; then
+    create_bot "Grok Bot" "General teammate. Ask what one task you can take off the person's plate."
+    return 0
+  fi
+  printf '%s\n' grok-bot > "$DATA/current"
+  load_bot grok-bot
+}
+
+list_bots() {
+  local d any=0
+  ensure_data
+  shopt -s nullglob
+  for d in "$DATA/bots"/*; do
+    [[ -d "$d" ]] || continue
+    any=1
+    printf '%s\t%s — %s\n' "$(basename "$d")" "$(<"$d/name")" "$(<"$d/job")"
+  done
+  shopt -u nullglob
+  if [[ "$any" == 0 ]]; then
+    printf '(no bots)\n'
+  fi
+}
+
+approve() {
+  local prompt=$1
+  local ans=""
+  if [[ "$YES" == 1 ]]; then
+    return 0
+  fi
+  if [[ "${GROK_BOT_DENY:-0}" == 1 ]]; then
+    return 1
+  fi
+  if [[ ! -e /dev/tty ]]; then
+    printf 'denied (no terminal). Re-run with --yes to approve.\n' >&2
+    return 1
+  fi
+  read -r -p "$prompt [y/N] " ans </dev/tty || return 1
+  [[ "$ans" == "y" || "$ans" == "Y" || "$ans" == "yes" || "$ans" == "YES" ]]
+}
+
+resolve_user_path() {
+  local input=$1
+  local path norm ws
+  if [[ -z "$input" || "$input" == "." ]]; then
+    realpath -m "$BOT_WORKSPACE"
+    return 0
+  fi
+  if [[ "$input" == /* ]]; then
+    realpath -m "$input"
+    return 0
+  fi
+  path=$BOT_WORKSPACE/$input
+  norm=$(realpath -m "$path")
+  ws=$(realpath -m "$BOT_WORKSPACE")
+  if [[ "$norm" != "$ws" && "$norm" != "$ws"/* ]]; then
+    return 1
+  fi
+  printf '%s\n' "$norm"
+}
+
+tool_run() {
+  local args=$1
+  local cmd out status
+  cmd=$(jq -r '.command // empty' <<<"$args")
+  if [[ -z "$cmd" ]]; then
+    jq -cn '{ok:false, error:"missing command"}'
+    return 0
+  fi
+  printf 'run: %s\n' "$cmd" >&2
+  if ! approve "Approve this command?"; then
+    jq -cn '{ok:false, error:"The user did not approve this command."}'
+    return 0
+  fi
+  set +e
+  out=$(cd "$BOT_WORKSPACE" && timeout --signal=TERM 120 bash -lc "$cmd" 2>&1)
+  status=$?
+  set -e
+  if [[ ${#out} -gt 20000 ]]; then
+    out=${out:0:20000}
+    out+=$'\n[truncated]'
+  fi
+  RAN_NOTES+=$'\n'"[ran] $cmd (exit $status)"
+  jq -cn --arg output "$out" --argjson status "$status" '{ok:true, exit:$status, output:$output}'
+}
+
+tool_read() {
+  local args=$1
+  local input path raw encoded
+  input=$(jq -r '.path // empty' <<<"$args")
+  if [[ -z "$input" ]]; then
+    jq -cn '{ok:false, error:"missing path"}'
+    return 0
+  fi
+  if ! path=$(resolve_user_path "$input"); then
+    jq -cn '{ok:false, error:"path escapes the workspace"}'
+    return 0
+  fi
+  if [[ ! -f "$path" ]]; then
+    jq -cn --arg path "$path" '{ok:false, error:"not a file", path:$path}'
+    return 0
+  fi
+  # A NUL in the first 20KB means this is not a text file. The pipeline
+  # status has to be read's status: head exits with SIGPIPE once read stops.
+  local binary=0
+  set +o pipefail
+  if head -c 20000 "$path" | IFS= read -r -d '' _; then
+    binary=1
+  fi
+  set -o pipefail
+  if [[ "$binary" == 1 ]]; then
+    jq -cn --arg path "$path" '{ok:false, error:"binary file", path:$path}'
+    return 0
+  fi
+  raw=$(head -c 20000 "$path" || true)
+  if [[ $(wc -c < "$path") -gt 20000 ]]; then
+    raw+=$'\n[truncated]'
+  fi
+  if ! encoded=$(jq -cn --arg output "$raw" --arg path "$path" '{ok:true, path:$path, output:$output}'); then
+    jq -cn --arg path "$path" '{ok:false, error:"file is not valid UTF-8 text", path:$path}'
+    return 0
+  fi
+  printf '%s\n' "$encoded"
+}
+
+tool_write() {
+  local args=$1
+  local input path content
+  input=$(jq -r '.path // empty' <<<"$args")
+  content=$(jq -r '.content // empty' <<<"$args")
+  if [[ -z "$input" ]]; then
+    jq -cn '{ok:false, error:"missing path"}'
+    return 0
+  fi
+  if ! path=$(resolve_user_path "$input"); then
+    jq -cn '{ok:false, error:"path escapes the workspace"}'
+    return 0
+  fi
+  printf 'write: %s (%s bytes)\n' "$path" "${#content}" >&2
+  if ! approve "Approve this write?"; then
+    jq -cn '{ok:false, error:"The user did not approve this write."}'
+    return 0
+  fi
+  mkdir -p "$(dirname "$path")"
+  printf '%s' "$content" > "$path"
+  RAN_NOTES+=$'\n'"[wrote] $path"
+  jq -cn --arg path "$path" --argjson bytes "${#content}" '{ok:true, path:$path, bytes:$bytes}'
+}
+
+tool_list() {
+  local args=$1
+  local input path listing
+  input=$(jq -r '.path // empty' <<<"$args")
+  if ! path=$(resolve_user_path "$input"); then
+    jq -cn '{ok:false, error:"path escapes the workspace"}'
+    return 0
+  fi
+  if [[ ! -d "$path" ]]; then
+    jq -cn --arg path "$path" '{ok:false, error:"not a directory", path:$path}'
+    return 0
+  fi
+  listing=$(ls -la "$path" 2>&1 | head -c 20000 || true)
+  jq -cn --arg path "$path" --arg output "$listing" '{ok:true, path:$path, output:$output}'
+}
+
+tool_remember() {
+  local args=$1
+  local fact
+  fact=$(jq -r '.fact // empty' <<<"$args")
+  if [[ -z "$fact" ]]; then
+    jq -cn '{ok:false, error:"missing fact"}'
+    return 0
+  fi
+  printf -- '- %s — %s\n' "$(date -Iseconds)" "$fact" >> "$BOT_MEMORY"
+  if [[ $(wc -c < "$BOT_MEMORY") -gt 30000 ]]; then
+    local tmp
+    tmp=$(mktemp)
+    { printf '%s\n' '# Memory'; tail -n 150 "$BOT_MEMORY"; } > "$tmp"
+    mv "$tmp" "$BOT_MEMORY"
+  fi
+  RAN_NOTES+=$'\n'"[remembered] $fact"
+  jq -cn --arg fact "$fact" '{ok:true, saved:$fact}'
+}
+
+dispatch() {
+  local name=$1
+  local args=$2
+  case "$name" in
+    run_command) tool_run "$args" ;;
+    read_file) tool_read "$args" ;;
+    write_file) tool_write "$args" ;;
+    list_dir) tool_list "$args" ;;
+    remember) tool_remember "$args" ;;
+    *) jq -cn --arg name "$name" '{ok:false, error:("Unknown tool: " + $name)}' ;;
+  esac
+}
+
+tools_json() {
+  cat <<'EOF'
+[
+  {"type":"web_search"},
+  {"type":"x_search"},
+  {
+    "type":"function",
+    "name":"run_command",
+    "description":"Run a bash command on the user's computer, starting in this bot's workspace. The user must approve it before it runs.",
+    "parameters":{
+      "type":"object",
+      "properties":{"command":{"type":"string","description":"Bash command to run"}},
+      "required":["command"]
+    }
+  },
+  {
+    "type":"function",
+    "name":"read_file",
+    "description":"Read a UTF-8 text file. Relative paths stay inside the workspace. Absolute paths are allowed.",
+    "parameters":{
+      "type":"object",
+      "properties":{"path":{"type":"string"}},
+      "required":["path"]
+    }
+  },
+  {
+    "type":"function",
+    "name":"write_file",
+    "description":"Write a text file. The user must approve it. Relative paths stay inside the workspace.",
+    "parameters":{
+      "type":"object",
+      "properties":{
+        "path":{"type":"string"},
+        "content":{"type":"string"}
+      },
+      "required":["path","content"]
+    }
+  },
+  {
+    "type":"function",
+    "name":"list_dir",
+    "description":"List a directory. Omit path to list the workspace.",
+    "parameters":{
+      "type":"object",
+      "properties":{"path":{"type":"string"}},
+      "required":[]
+    }
+  },
+  {
+    "type":"function",
+    "name":"remember",
+    "description":"Save a stable preference or fact in this bot's memory.",
+    "parameters":{
+      "type":"object",
+      "properties":{"fact":{"type":"string"}},
+      "required":["fact"]
+    }
+  }
+]
+EOF
+}
+
+instructions_text() {
+  local memory
+  memory=$(<"$BOT_MEMORY")
+  if [[ ${#memory} -gt 12000 ]]; then
+    memory=${memory: -12000}
+  fi
+  cat <<EOF
+You are ${BOT_NAME}, a Grok Bot running in the user's shell on their Linux computer.
+This is the bash version of Grok Bot. You do not have the desktop app's cloud computer.
+You do have this workspace: ${BOT_WORKSPACE}
+Job: ${BOT_JOB}
+
+Memory (facts you saved earlier):
+${memory}
+
+Work with the user as a teammate. Do the task, don't just describe it.
+Use run_command, read_file, write_file, and list_dir for local work.
+run_command and write_file wait for the user's approval. If they deny one, change the plan.
+Use remember for stable preferences and facts.
+Use web search when the answer depends on current public information.
+Never claim a command ran unless a tool result says so.
+Keep replies concise. Lead with the result.
+EOF
+}
+
+build_input() {
+  local message=$1
+  if [[ -s "$BOT_TRANSCRIPT" ]]; then
+    tail -n 40 "$BOT_TRANSCRIPT" | jq -s --arg msg "$message" '. + [{role:"user", content:$msg}]'
+  else
+    jq -cn --arg msg "$message" '[{role:"user", content:$msg}]'
+  fi
+}
+
+call_model() {
+  local input_json=$1
+  local prev=${2:-}
+  local body http code instructions tools
+  body=$(mktemp)
+  http=$(mktemp)
+  instructions=$(instructions_text)
+  tools=$(tools_json)
+  if ! jq -cn \
+    --arg model "$MODEL" \
+    --arg instructions "$instructions" \
+    --argjson input "$input_json" \
+    --argjson tools "$tools" \
+    --arg prev "$prev" \
+    '{model:$model, instructions:$instructions, input:$input, tools:$tools}
+     + (if $prev == "" then {} else {previous_response_id:$prev} end)' \
+    >"$body"; then
+    rm -f "$body" "$http"
+    printf 'could not build the API request\n' >&2
+    return 1
+  fi
+  if ! code=$(curl -sS --max-time 180 -o "$http" -w '%{http_code}' \
+    -H "Authorization: Bearer ${XAI_API_KEY}" \
+    -H "Content-Type: application/json" \
+    -d @"$body" \
+    "$API/responses"); then
+    rm -f "$body" "$http"
+    printf 'could not reach %s\n' "$API" >&2
+    return 1
+  fi
+  rm -f "$body"
+  if [[ "$code" != 2* ]]; then
+    printf 'Grok API returned HTTP %s\n' "$code" >&2
+    if jq -e . >/dev/null 2>&1 <"$http"; then
+      jq -r '.error.message // .error // .' "$http" >&2
+    else
+      cat "$http" >&2
+    fi
+    rm -f "$http"
+    return 1
+  fi
+  cat "$http"
+  rm -f "$http"
+}
+
+append_transcript() {
+  local role=$1
+  local content=$2
+  jq -cn --arg role "$role" --arg content "$content" '{role:$role, content:$content}' >> "$BOT_TRANSCRIPT"
+}
+
+run_calls() {
+  local calls=$1
+  local n i name id args result outputs
+  n=$(jq 'length' <<<"$calls")
+  outputs='[]'
+  for ((i = 0; i < n; i++)); do
+    name=$(jq -r --argjson i "$i" '.[$i].name // .[$i].function.name // empty' <<<"$calls")
+    id=$(jq -r --argjson i "$i" '.[$i].call_id // .[$i].id // empty' <<<"$calls")
+    args=$(jq -c --argjson i "$i" '.[$i].arguments | if type == "string" then (try fromjson catch {}) else (. // {}) end' <<<"$calls")
+    if [[ -z "$id" ]]; then
+      result=$(jq -cn '{ok:false, error:"tool call had no call_id"}')
+      id="missing-$i"
+    else
+      result=$(dispatch "$name" "$args")
+    fi
+    outputs=$(jq -c --arg id "$id" --arg output "$result" \
+      '. + [{type:"function_call_output", call_id:$id, output:$output}]' <<<"$outputs")
+  done
+  printf '%s\n' "$outputs"
+}
+
+converse() {
+  local message=$1
+  local input prev="" response text calls rounds=0
+  if [[ -z "${XAI_API_KEY:-}" ]]; then
+    printf 'Set XAI_API_KEY. Create one at https://console.x.ai/team/default/api-keys\n' >&2
+    return 1
+  fi
+  need curl jq || return 1
+  RAN_NOTES=""
+  input=$(build_input "$message")
+  while [[ "$rounds" -lt 8 ]]; do
+    rounds=$((rounds + 1))
+    response=$(call_model "$input" "$prev") || return 1
+    prev=$(jq -r '.id // empty' <<<"$response")
+    text=$(jq -r '
+      if ((.output_text // "") | type) == "string" and (.output_text // "") != "" then
+        .output_text
+      else
+        ([.output[]? | select(.type == "message") | .content[]? | (.text // empty) | select(length > 0)] | join("\n"))
+      end
+    ' <<<"$response")
+    calls=$(jq -c '[.output[]? | select(.type == "function_call")]' <<<"$response") || {
+      printf 'Grok API returned a response that was not usable JSON\n' >&2
+      return 1
+    }
+    if [[ "$calls" == "[]" ]]; then
+      break
+    fi
+    if [[ -n "$text" ]]; then
+      printf '%s\n' "$text" >&2
+    fi
+    input=$(run_calls "$calls")
+  done
+  if [[ -z "$text" ]]; then
+    text="Stopped without a final reply."
+  fi
+  local saved=$text
+  if [[ -n "$RAN_NOTES" ]]; then
+    saved+=$'\n'"$RAN_NOTES"
+  fi
+  append_transcript user "$message"
+  append_transcript assistant "$saved"
+  printf '%s\n' "$text"
+}
+
+routine_add() {
+  local name=$1
+  local prompt=$2
+  local tmp slug
+  [[ -n "$name" && -n "$prompt" ]] || { printf 'usage: %s routine add NAME PROMPT\n' "$(cmd_name)" >&2; return 1; }
+  slug=$(slugify "$name")
+  [[ -n "$slug" ]] || { printf 'routine name needs a letter or number\n' >&2; return 1; }
+  tmp=$(mktemp)
+  if [[ -s "$BOT_DIR/routines.jsonl" ]]; then
+    jq -c --arg name "$slug" 'select(.name != $name)' "$BOT_DIR/routines.jsonl" >"$tmp" || true
+  fi
+  jq -cn --arg name "$slug" --arg prompt "$prompt" '{name:$name, prompt:$prompt}' >>"$tmp"
+  mv "$tmp" "$BOT_DIR/routines.jsonl"
+  printf 'routine %s saved\n' "$slug" >&2
+  printf 'cron example: 0 8 * * 1-5 %s --bot %s routine run %s\n' "$0" "$BOT_SLUG" "$slug" >&2
+  printf 'Add --yes only when that cron job should run shell commands with no prompt.\n' >&2
+}
+
+routine_list() {
+  if [[ ! -s "$BOT_DIR/routines.jsonl" ]]; then
+    printf '(no routines)\n'
+    return 0
+  fi
+  jq -r '"\(.name)\t\(.prompt)"' "$BOT_DIR/routines.jsonl"
+}
+
+routine_remove() {
+  local name slug tmp
+  name=${1:-}
+  slug=$(slugify "$name")
+  [[ -n "$slug" ]] || { printf 'usage: %s routine remove NAME\n' "$(cmd_name)" >&2; return 1; }
+  tmp=$(mktemp)
+  if [[ -s "$BOT_DIR/routines.jsonl" ]]; then
+    jq -c --arg name "$slug" 'select(.name != $name)' "$BOT_DIR/routines.jsonl" >"$tmp" || true
+  fi
+  mv "$tmp" "$BOT_DIR/routines.jsonl"
+  printf 'removed %s\n' "$slug" >&2
+}
+
+routine_run() {
+  local name slug prompt
+  name=${1:-}
+  slug=$(slugify "$name")
+  [[ -n "$slug" ]] || { printf 'usage: %s routine run NAME\n' "$(cmd_name)" >&2; return 1; }
+  prompt=$(jq -r --arg name "$slug" 'select(.name == $name) | .prompt' "$BOT_DIR/routines.jsonl" | head -n 1)
+  if [[ -z "$prompt" ]]; then
+    printf 'no routine: %s\n' "$name" >&2
+    return 1
+  fi
+  converse "$prompt"
+}
+
+routine_cli() {
+  local sub=${1:-}
+  shift || true
+  case "$sub" in
+    add)
+      local name=${1:-}
+      shift || true
+      routine_add "$name" "$*"
+      ;;
+    list) routine_list ;;
+    run) routine_run "${1:-}" ;;
+    remove) routine_remove "${1:-}" ;;
+    *)
+      printf 'usage: %s routine add|list|run|remove\n' "$(cmd_name)" >&2
+      return 1
+      ;;
+  esac
+}
+
+handle_slash() {
+  local line=$1
+  local cmd rest
+  cmd=${line%% *}
+  rest=${line#"$cmd"}
+  rest=${rest# }
+  case "$cmd" in
+    /help) chat_help >&2 ;;
+    /bots | /list) list_bots >&2 ;;
+    /memory) printf '%s\n' "$(<"$BOT_MEMORY")" ;;
+    /use) switch_bot "$rest" ;;
+    /new)
+      create_bot "$rest" "Teammate"
+      ;;
+    /job)
+      [[ -n "$rest" ]] || { printf 'usage: /job TEXT\n' >&2; return 1; }
+      printf '%s\n' "$rest" >"$BOT_DIR/job"
+      BOT_JOB=$rest
+      printf 'job saved\n' >&2
+      ;;
+    /routine)
+      local -a words=()
+      if [[ -n "$rest" ]]; then
+        read -r -a words <<< "$rest"
+      fi
+      routine_cli "${words[@]}"
+      ;;
+    *)
+      printf 'Unknown command. Type /help\n' >&2
+      return 1
+      ;;
+  esac
+}
+
+chat() {
+  local line reply
+  printf 'Grok Bot (bash) — %s\n' "$BOT_NAME" >&2
+  printf 'workspace: %s\n' "$BOT_WORKSPACE" >&2
+  printf 'Type /help. End with /quit.\n' >&2
+  while true; do
+    if ! IFS= read -r -e -p 'you> ' line; then
+      printf '\n' >&2
+      break
+    fi
+    if [[ -z "$line" ]]; then
+      continue
+    fi
+    if [[ "$line" == "/quit" || "$line" == "/exit" ]]; then
+      break
+    fi
+    if [[ "$line" == /* ]]; then
+      handle_slash "$line" || true
+      continue
+    fi
+    if ! reply=$(converse "$line"); then
+      printf 'request failed\n' >&2
+      continue
+    fi
+    printf 'bot> %s\n' "$reply"
+  done
+}
+
+self_test() {
+  local tmp result
+  tmp=$(mktemp -d)
+  DATA=$tmp
+  YES=1
+  create_bot "Test Bot" "self test" >/dev/null
+  [[ -f "$BOT_WORKSPACE/../memory.md" ]]
+  result=$(dispatch remember '{"fact":"likes short answers"}')
+  grep -q 'likes short answers' <<<"$result"
+  grep -q 'likes short answers' "$BOT_MEMORY"
+  result=$(dispatch write_file '{"path":"hello.txt","content":"hi"}')
+  grep -q '"ok":true' <<<"$result"
+  grep -q 'hi' "$BOT_WORKSPACE/hello.txt"
+  result=$(dispatch read_file '{"path":"hello.txt"}')
+  grep -q 'hi' <<<"$result"
+  result=$(dispatch list_dir '{}')
+  grep -q 'hello.txt' <<<"$result"
+  result=$(dispatch run_command '{"command":"printf pong"}')
+  grep -q 'pong' <<<"$result"
+  if dispatch write_file '{"path":"../escape.txt","content":"no"}' | grep -q '"ok":true'; then
+    printf 'self-test failed: path escape was allowed\n' >&2
+    return 1
+  fi
+  YES=0
+  GROK_BOT_DENY=1
+  result=$(dispatch run_command '{"command":"printf no"}')
+  grep -q 'did not approve' <<<"$result"
+  routine_add morning "Say good morning" >/dev/null
+  routine_list | grep -q $'^morning\tSay good morning$'
+  printf 'self-test passed\n'
+  rm -rf "$tmp"
+}
+
+main() {
+  local -a pos=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      -h | --help | help)
+        usage
+        return 0
+        ;;
+      --yes)
+        YES=1
+        shift
+        ;;
+      --bot)
+        [[ $# -ge 2 ]] || { printf -- '--bot needs a name\n' >&2; return 2; }
+        BOT_OPT=$2
+        shift 2
+        ;;
+      --data-dir)
+        [[ $# -ge 2 ]] || { printf -- '--data-dir needs a path\n' >&2; return 2; }
+        DATA=$2
+        shift 2
+        ;;
+      --)
+        shift
+        pos+=("$@")
+        break
+        ;;
+      -*)
+        printf 'unknown option: %s\n' "$1" >&2
+        usage >&2
+        return 2
+        ;;
+      *)
+        pos+=("$1")
+        shift
+        pos+=("$@")
+        break
+        ;;
+    esac
+  done
+
+  need jq || return 1
+  local cmd=${pos[0]:-}
+  case "$cmd" in
+    self-test)
+      self_test
+      ;;
+    list)
+      list_bots
+      ;;
+    new)
+      local name=${pos[1]:-}
+      local job="Teammate"
+      local i
+      for ((i = 2; i < ${#pos[@]}; i++)); do
+        if [[ ${pos[$i]} == --job ]]; then
+          job=${pos[$((i + 1))]:-Teammate}
+        fi
+      done
+      create_bot "$name" "$job"
+      ;;
+    use)
+      ensure_data
+      switch_bot "${pos[1]:-}"
+      ;;
+    memory)
+      ensure_bot
+      if [[ ${pos[1]:-} == edit ]]; then
+        "${EDITOR:-vi}" "$BOT_MEMORY"
+      else
+        cat "$BOT_MEMORY"
+      fi
+      ;;
+    routine)
+      ensure_bot
+      routine_cli "${pos[@]:1}"
+      ;;
+    "")
+      ensure_bot
+      chat
+      ;;
+    *)
+      ensure_bot
+      converse "${pos[*]}"
+      ;;
+  esac
+}
+
+main "$@"

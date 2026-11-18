@@ -1,0 +1,13 @@
+# Debian package build
+debian/files
+debian/*.substvars
+debian/*.debhelper
+debian/.debhelper/
+debian/grok-bot-bash/
+debian/tmp/
+
+# Editor and OS
+*~
+*.swp
+*.swo
+.DS_Store

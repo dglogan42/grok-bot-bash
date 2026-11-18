@@ -1,0 +1,27 @@
+#!/usr/bin/make -f
+
+PKG  = grok-bot-bash
+DEST = debian/$(PKG)
+
+.PHONY: clean build build-indep build-arch binary binary-indep binary-arch
+
+clean:
+	rm -rf $(DEST) debian/files debian/*.substvars
+
+build: build-indep
+build-indep:
+build-arch:
+
+binary: binary-indep
+binary-arch:
+
+binary-indep: build-indep
+	rm -rf $(DEST)
+	install -D -m 0755 grok-bot $(DEST)/usr/bin/grok-bot-bash
+	install -D -m 0644 debian/copyright $(DEST)/usr/share/doc/$(PKG)/copyright
+	gzip -9n -c debian/changelog > $(DEST)/usr/share/doc/$(PKG)/changelog.gz
+	chmod 0644 $(DEST)/usr/share/doc/$(PKG)/changelog.gz
+	mkdir -p $(DEST)/DEBIAN
+	dpkg-gencontrol -P$(DEST)
+	dpkg-deb --root-owner-group --build $(DEST) ..
+	rm -rf $(DEST)
