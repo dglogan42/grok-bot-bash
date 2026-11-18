@@ -196,24 +196,30 @@ approve() {
   [[ "$ans" == "y" || "$ans" == "Y" || "$ans" == "yes" || "$ans" == "YES" ]]
 }
 
+# Resolve a user-supplied path.
+# With confine=1 (write/list), the result must stay inside the workspace
+# even when the input is absolute. read_file omits confine so absolute
+# paths outside the workspace still work.
 resolve_user_path() {
   local input=$1
-  local path norm ws
+  local confine=${2:-0}
+  local path ws
   if [[ -z "$input" || "$input" == "." ]]; then
     realpath -m "$BOT_WORKSPACE"
     return 0
   fi
   if [[ "$input" == /* ]]; then
-    realpath -m "$input"
-    return 0
+    path=$(realpath -m "$input")
+  else
+    path=$(realpath -m "$BOT_WORKSPACE/$input")
   fi
-  path=$BOT_WORKSPACE/$input
-  norm=$(realpath -m "$path")
   ws=$(realpath -m "$BOT_WORKSPACE")
-  if [[ "$norm" != "$ws" && "$norm" != "$ws"/* ]]; then
-    return 1
+  if [[ "$confine" == 1 || "$input" != /* ]]; then
+    if [[ "$path" != "$ws" && "$path" != "$ws"/* ]]; then
+      return 1
+    fi
   fi
-  printf '%s\n' "$norm"
+  printf '%s\n' "$path"
 }
 
 tool_run() {
@@ -289,7 +295,7 @@ tool_write() {
     jq -cn '{ok:false, error:"missing path"}'
     return 0
   fi
-  if ! path=$(resolve_user_path "$input"); then
+  if ! path=$(resolve_user_path "$input" 1); then
     jq -cn '{ok:false, error:"path escapes the workspace"}'
     return 0
   fi
@@ -308,7 +314,7 @@ tool_list() {
   local args=$1
   local input path listing
   input=$(jq -r '.path // empty' <<<"$args")
-  if ! path=$(resolve_user_path "$input"); then
+  if ! path=$(resolve_user_path "$input" 1); then
     jq -cn '{ok:false, error:"path escapes the workspace"}'
     return 0
   fi
@@ -380,7 +386,7 @@ tools_json() {
   {
     "type":"function",
     "name":"write_file",
-    "description":"Write a text file. The user must approve it. Relative paths stay inside the workspace.",
+    "description":"Write a text file inside this bot's workspace. The user must approve it. Absolute paths outside the workspace are rejected.",
     "parameters":{
       "type":"object",
       "properties":{
@@ -393,7 +399,7 @@ tools_json() {
   {
     "type":"function",
     "name":"list_dir",
-    "description":"List a directory. Omit path to list the workspace.",
+    "description":"List a directory inside this bot's workspace. Omit path to list the workspace root.",
     "parameters":{
       "type":"object",
       "properties":{"path":{"type":"string"}},
@@ -718,7 +724,25 @@ self_test() {
   result=$(dispatch run_command '{"command":"printf pong"}')
   grep -q 'pong' <<<"$result"
   if dispatch write_file '{"path":"../escape.txt","content":"no"}' | grep -q '"ok":true'; then
-    printf 'self-test failed: path escape was allowed\n' >&2
+    printf 'self-test failed: relative path escape was allowed\n' >&2
+    return 1
+  fi
+  # Absolute paths must not write outside the workspace either (approval
+  # is separate from confinement).
+  local abs_escape=$tmp/absolute-escape.txt
+  result=$(dispatch write_file "$(jq -cn --arg path "$abs_escape" '{path:$path, content:"no"}')")
+  if grep -q '"ok":true' <<<"$result"; then
+    printf 'self-test failed: absolute path escape was allowed\n' >&2
+    return 1
+  fi
+  grep -q 'path escapes the workspace' <<<"$result"
+  [[ ! -e "$abs_escape" ]]
+  # Absolute path *inside* the workspace still works.
+  result=$(dispatch write_file "$(jq -cn --arg path "$BOT_WORKSPACE/abs-ok.txt" '{path:$path, content:"inside"}')")
+  grep -q '"ok":true' <<<"$result"
+  grep -q 'inside' "$BOT_WORKSPACE/abs-ok.txt"
+  if dispatch list_dir "$(jq -cn --arg path "$tmp" '{path:$path}')" | grep -q '"ok":true'; then
+    printf 'self-test failed: list_dir escaped the workspace\n' >&2
     return 1
   fi
   YES=0
