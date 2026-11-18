@@ -71,7 +71,15 @@ Public agents from the [Grok Bot marketplace](https://x.ai/bot/marketplace) are 
 python3 scripts/pull-marketplace.py
 ```
 
-Each file under `marketplace/agents/` is the public template: name, job blurb, skills, routines, and memories. Import into the Grok Bot app still happens on x.ai.
+Each file under `marketplace/agents/` is the public template: name, job blurb, skills, routines, and memories. The shell reads those files directly:
+
+```bash
+./grok-bot agents
+./grok-bot agent show dr-eggbot-v2
+./grok-bot agent use dr-eggbot-v2
+```
+
+`agent use` creates a local bot from that JSON: the description becomes the job, memories are saved, routines are saved, and skills are included in every reply. Import into the Grok Bot desktop app still happens on x.ai.
 
 ## Package
 

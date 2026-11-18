@@ -37,6 +37,9 @@ Usage:
   $(cmd_name) routine list
   $(cmd_name) routine run NAME
   $(cmd_name) routine remove NAME
+  $(cmd_name) agents
+  $(cmd_name) agent show ID
+  $(cmd_name) agent use ID
   $(cmd_name) self-test
 
 Options:
@@ -65,6 +68,9 @@ chat_help() {
 /routine list             List routines
 /routine run NAME         Run a saved routine now
 /routine remove NAME      Delete a routine
+/agents                   List marketplace agents
+/agent show ID            Show one marketplace agent
+/agent use ID             Import that agent and switch to it
 EOF
 }
 
@@ -112,9 +118,13 @@ load_bot() {
 create_bot() {
   local name=$1
   local job=$2
-  local slug
+  local slug=${3:-}
   [[ -n "$name" ]] || { printf 'usage: %s new NAME [--job TEXT]\n' "$(cmd_name)" >&2; return 1; }
-  slug=$(slugify "$name")
+  if [[ -z "$slug" ]]; then
+    slug=$(slugify "$name")
+  else
+    slug=$(slugify "$slug")
+  fi
   [[ -n "$slug" ]] || { printf 'bot name needs a letter or number\n' >&2; return 1; }
   if [[ -d "$DATA/bots/$slug" ]]; then
     printf 'bot already exists: %s\n' "$name" >&2
@@ -496,6 +506,132 @@ tools_json() {
 EOF
 }
 
+marketplace_root() {
+  local dir
+  if [[ -n "${GROK_BOT_MARKETPLACE:-}" && -d "${GROK_BOT_MARKETPLACE}/agents" ]]; then
+    printf '%s\n' "$GROK_BOT_MARKETPLACE"
+    return 0
+  fi
+  dir=$(dirname "$(readlink -f "$0")")
+  if [[ -d "$dir/marketplace/agents" ]]; then
+    printf '%s\n' "$dir/marketplace"
+    return 0
+  fi
+  if [[ -d /usr/share/grok-bot-bash/marketplace/agents ]]; then
+    printf '%s\n' /usr/share/grok-bot-bash/marketplace
+    return 0
+  fi
+  printf 'marketplace JSON was not found. Set GROK_BOT_MARKETPLACE.\n' >&2
+  return 1
+}
+
+agent_file() {
+  local id=$1 root file
+  [[ "$id" =~ ^[A-Za-z0-9._-]+$ ]] || {
+    printf 'bad agent id\n' >&2
+    return 1
+  }
+  root=$(marketplace_root) || return 1
+  file=$root/agents/$id.json
+  [[ -f "$file" ]] || {
+    printf 'no marketplace agent: %s\n' "$id" >&2
+    return 1
+  }
+  printf '%s\n' "$file"
+}
+
+agent_list() {
+  local root
+  root=$(marketplace_root) || return 1
+  if [[ -f "$root/index.json" ]]; then
+    jq -r '.agents[] | "\(.id)\t\(.name) — \(.creatorName // "")"' "$root/index.json"
+    return 0
+  fi
+  local file
+  for file in "$root/agents"/*.json; do
+    jq -r '"\(.id)\t\(.name)"' "$file"
+  done
+}
+
+agent_show() {
+  local id=${1:-} file
+  [[ -n "$id" ]] || {
+    printf 'usage: %s agent show ID\n' "$(cmd_name)" >&2
+    return 1
+  }
+  file=$(agent_file "$id") || return 1
+  jq -r '
+    "\(.name) (\(.id))",
+    "by \(.creatorName // "unknown")",
+    "",
+    (.description // .summary // ""),
+    "",
+    "skills:",
+    (.skills[]? | "- \(.name)"),
+    "",
+    "routines:",
+    (.routines[]? | "- \(.name): \(.summary // .description // "")")
+  ' "$file"
+}
+
+agent_use() {
+  local id=${1:-} file name job
+  [[ -n "$id" ]] || {
+    printf 'usage: %s agent use ID\n' "$(cmd_name)" >&2
+    return 1
+  }
+  file=$(agent_file "$id") || return 1
+  name=$(jq -r '.name // empty' "$file")
+  job=$(jq -r '.description // .summary // "Teammate"' "$file")
+  [[ -n "$name" ]] || {
+    printf 'agent has no name: %s\n' "$id" >&2
+    return 1
+  }
+  create_bot "$name" "$job" "$id"
+  cp -f -- "$file" "$BOT_DIR/agent.json"
+  {
+    printf '%s\n' '# Memory'
+    jq -r '.memories[]? | "- \(.name): \(.description // "")"' "$file"
+  } >"$BOT_MEMORY"
+  local row rname rprompt
+  while IFS= read -r row; do
+    [[ -n "$row" ]] || continue
+    rname=$(jq -r '.name // empty' <<<"$row")
+    rprompt=$(jq -r '.prompt // empty' <<<"$row")
+    [[ -n "$rname" && -n "$rprompt" ]] || continue
+    routine_add "$rname" "$rprompt" >/dev/null
+  done < <(jq -c '.routines[]? | {name: (.name // "routine"), prompt: (.summary // .description // .name // "")}' "$file")
+  printf 'using marketplace agent %s\n' "$name" >&2
+}
+
+agent_cli() {
+  local sub=${1:-}
+  shift || true
+  case "$sub" in
+    "" | list) agent_list ;;
+    show) agent_show "${1:-}" ;;
+    use) agent_use "${1:-}" ;;
+    *)
+      printf 'usage: %s agent list|show|use\n' "$(cmd_name)" >&2
+      return 1
+      ;;
+  esac
+}
+
+agent_prompt_extra() {
+  [[ -n "${BOT_DIR:-}" && -f "$BOT_DIR/agent.json" ]] || return 0
+  jq -r '
+    [
+      (if ((.skills // []) | length) > 0 then
+        "Skills:\n\n" + ([.skills[] | "### \(.name)\n\(.content // .description // "")"] | join("\n\n"))
+      else empty end),
+      (if ((.integrations // []) | length) > 0 then
+        "Integrations:\n" + ([.integrations[] | "- \(.name): \(.description // "")"] | join("\n"))
+      else empty end)
+    ] | join("\n\n")
+  ' "$BOT_DIR/agent.json" || true
+}
+
 instructions_text() {
   local memory
   memory=$(<"$BOT_MEMORY")
@@ -510,6 +646,7 @@ Job: ${BOT_JOB}
 
 Memory (facts you saved earlier):
 ${memory}
+$(agent_prompt_extra)
 
 Work with the user as a teammate. Do the task, don't just describe it.
 Use run_command, read_file, write_file, and list_dir for local work.
@@ -778,6 +915,14 @@ handle_slash() {
       fi
       routine_cli "${words[@]}"
       ;;
+    /agents) agent_list ;;
+    /agent)
+      local -a words=()
+      if [[ -n "$rest" ]]; then
+        read -r -a words <<< "$rest"
+      fi
+      agent_cli "${words[@]}"
+      ;;
     *)
       printf 'Unknown command. Type /help\n' >&2
       return 1
@@ -901,6 +1046,17 @@ self_test() {
   grep -q 'secret' <<<"$result"
   routine_add morning "Say good morning" >/dev/null
   routine_list | grep -q $'^morning\tSay good morning$'
+  (
+    DATA=$tmp/market
+    YES=1
+    agent_use dr-eggbot-v2 >/dev/null
+    grep -q 'Design a Grok Bot' <<<"$(instructions_text)"
+    [[ "$(routine_prompt transcript-healthcheck)" == *friction* ]]
+    grep -q 'poteto-mode' "$BOT_MEMORY"
+  ) || {
+    printf 'self-test failed: marketplace agent was not wired\n' >&2
+    return 1
+  }
   printf 'self-test passed\n'
   rm -rf "$tmp"
 }
@@ -981,6 +1137,12 @@ main() {
     routine)
       ensure_bot
       routine_cli "${pos[@]:1}"
+      ;;
+    agents)
+      agent_list
+      ;;
+    agent)
+      agent_cli "${pos[@]:1}"
       ;;
     "")
       ensure_bot
